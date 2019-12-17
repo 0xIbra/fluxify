@@ -3,11 +3,12 @@ import pandas as pd
 
 class CSVHandler:
 
-    def __init__(self, filepath, mapping):
+    def __init__(self, filepath, mapping, delimiter=',', header='infer'):
         self.filepath = filepath
         self.mapping = mapping
+        self.delimiter = delimiter
         
-        self.csv = pd.read_csv(filepath, skip_blank_lines=True)
+        self.csv = pd.read_csv(filepath, skip_blank_lines=True, delimiter=delimiter, header=header)
 
     def process(self):
         result = []
