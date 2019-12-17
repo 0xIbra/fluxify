@@ -14,9 +14,15 @@ class CSVHandler:
         for data, row in self.csv.T.iteritems():
             item = {}
             for key, value in self.mapping.items():
-                col = int(value['col'])
-                item = apply_value(item, key, row[col])
-            
+                if 'col' in value:
+                    col = int(value['col'])
+                    item = apply_value(item, key, row[col])
+                elif 'value' in value:
+                    item = apply_value(item, key, value['value'])
+                
+                # if 'transformations' in value:
+                    
+
             result.append(item)
         
         return result

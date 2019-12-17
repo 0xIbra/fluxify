@@ -1,5 +1,5 @@
 from mapper import Mapper
-import yaml
+import yaml, json
 
 yamlmapping = """
 maker.original:
@@ -16,3 +16,4 @@ Map = yaml.load(yamlmapping, Loader=yaml.FullLoader)
 
 mapper = Mapper()
 data = mapper.map('./examples/flux1.csv', Map)
+print(json.dumps(data))
