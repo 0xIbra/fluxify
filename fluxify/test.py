@@ -10,6 +10,18 @@ generation.original:
     col: 3
 gearbox.original:
     col: 4
+price:
+    col: 5
+    transformations:
+        - { transformer: 'number' }
+started_at.date:
+    col: 6
+    transformations:
+        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%d/%m/%Y' }
+started_at.time:
+    col: 6
+    transformations:
+        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%H:%M' }
 """
 
 Map = yaml.load(yamlmapping, Loader=yaml.FullLoader)

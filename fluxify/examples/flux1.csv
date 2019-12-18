@@ -1,3 +1,3 @@
-id,maker,model,generation,gearbox
-12334234,BMW,Serie 5,F10,Automatique
-04593,BMW,Serie 5,F30,Automatique
+id,maker,model,generation,gearbox,price,created_at
+12334234,BMW,Serie 5,F10,Automatique,24900,2019-10-03 12:39
+04593,BMW,Serie 3,F30,Automatique,21090,2019-11-19 09:48

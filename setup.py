@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     url='https://github.com/ibragim64/fluxify',
     packages=['fluxify'],
-    install_requires=['pandas'],
+    install_requires=['pandas', 'PyYAML'],
     classifiers=[
         "Programming Language :: Python :: 3"
     ]

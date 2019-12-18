@@ -1,4 +1,5 @@
 from helper.yamlparser import apply_value
+from transformers.transformer import handle_transformations
 import pandas as pd
 
 class CSVHandler:
@@ -17,11 +18,13 @@ class CSVHandler:
             for key, value in self.mapping.items():
                 if 'col' in value:
                     col = int(value['col'])
-                    item = apply_value(item, key, row[col])
+                    finalvalue = row[col]
+                    if 'transformations' in value:
+                        finalvalue = handle_transformations(value['transformations'], finalvalue)
+
+                    item = apply_value(item, key, finalvalue)
                 elif 'value' in value:
                     item = apply_value(item, key, value['value'])
-                
-                # if 'transformations' in value:
                     
 
             result.append(item)

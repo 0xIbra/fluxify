@@ -5,7 +5,8 @@ def apply_value(item, key, value):
         if index + 1 == len(levels):
             current[level] = value
         else:
-            current[level] = {}
+            if not level in current:
+                current[level] = {}
             
         current = current[level]
 
