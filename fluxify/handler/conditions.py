@@ -1,5 +1,5 @@
 from imperium.evaluator import Expression
-import re
+import re, parser
 
 def test(condition, subject):
     expr = Expression()
@@ -17,6 +17,9 @@ def normalize(value):
 def has(key, subject):
     split = key.split('.')
     for Key in split:
+        if Key == '$subject':
+            continue
+
         if not Key in subject:
             return False
         
@@ -27,6 +30,9 @@ def has(key, subject):
 def get(key, subject):
     split = key.split('.')
     for Key in split:
+        if Key == '$subject':
+            continue
+
         if not Key in subject:
             return False
         
@@ -43,13 +49,18 @@ def handle_conditions(conditions, subject):
 
         if test(cond['condition'], subject):
             value = normalize(cond['returnOnSuccess'])
-            if type(value) == str and '.' in value and has(value, subject):
+            if type(value) == str and '$subject.' in value:
                 value = get(value, subject)
+            if type(value) == str and '$subject[' in value:
+                value = value.replace('$subject', 'subject')
+                expr = parser.expr(value)
+
+                value = eval(expr.compile(''))
 
             returnvalue = value
         else:
             value = normalize(cond['returnOnFail'])
-            if type(value) == str and '.' in value and has(value, subject):
+            if type(value) == str and '$subject' in value:
                 value = get(value, subject)
             
             returnvalue = value

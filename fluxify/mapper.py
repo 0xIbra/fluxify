@@ -1,17 +1,20 @@
-from transformers.split import split
+from fluxify.transformers.transformer import TRANSFORMERS
 
 class Mapper:
-    def __init__(self, Type='csv'):
+
+    def map(self, filepath, mapping, Type='csv'):
         self.type = Type
-    
-    def map(self, filepath, mapping):
+
         if self.type == 'csv':
-            from handler.csv import CSVHandler
+            from fluxify.handler.csv import CSVHandler
             
             handler = CSVHandler(filepath, mapping)
             return handler.process()
         elif self.type == 'json':
-            pass
+            from fluxify.handler.json import JSONHandler
+
+            handler = JSONHandler(filepath, mapping)
+            return handler.process()
         elif self.type == 'xml':
             pass
         elif self.type == 'txt':

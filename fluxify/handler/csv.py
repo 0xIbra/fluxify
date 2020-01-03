@@ -1,7 +1,8 @@
-from helper.yamlparser import apply_value
-from transformers.transformer import handle_transformations
-from handler.conditions import handle_conditions
+from fluxify.helper.yamlparser import apply_value
+from fluxify.transformers.transformer import handle_transformations
+from fluxify.handler.conditions import handle_conditions
 import pandas as pd
+import parser
 
 class CSVHandler:
 
@@ -25,7 +26,13 @@ class CSVHandler:
 
                     item = apply_value(item, key, finalvalue)
                 elif 'value' in value:
-                    item = apply_value(item, key, value['value'])
+                    finalvalue = value['value']
+                    if type(finalvalue) == str:
+                        finalvalue = finalvalue.replace('$subject', 'item')
+                        expr = parser.expr(finalvalue)
+                        finalvalue = eval(expr.compile(''))
+
+                    item = apply_value(item, key, finalvalue)
                 elif 'conditions' in value:
                     finalvalue = handle_conditions(value['conditions'], item)
                     item = apply_value(item, key, finalvalue)

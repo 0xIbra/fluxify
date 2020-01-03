@@ -8,10 +8,10 @@ setuptools.setup(
     version='0.0.1',
     author='Ibragim Abubakarov',
     author_email='ibragim.ai95@gmail.com',
-    description='A micro python package that can retrieve and flow control data from almost any type of file.',
+    description='A Python package that eases the process of retrieving, organizing and modifying data.',
     long_description=long_description,
     url='https://github.com/ibragim64/fluxify',
-    packages=['fluxify'],
+    packages=['fluxify', 'fluxify.handler', 'fluxify.helper', 'fluxify.transformers'],
     install_requires=['pandas', 'PyYAML', 'imperium'],
     classifiers=[
         "Programming Language :: Python :: 3"

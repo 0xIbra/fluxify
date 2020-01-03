@@ -1,6 +1,6 @@
-from transformers.split import split
-from transformers.number import number
-from transformers.date import date
+from fluxify.transformers.split import split
+from fluxify.transformers.number import number
+from fluxify.transformers.date import date
 
 TRANSFORMERS = {
     'number': number,
