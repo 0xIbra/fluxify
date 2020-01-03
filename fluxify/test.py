@@ -10,6 +10,8 @@ generation.original:
     col: 3
 gearbox.original:
     col: 4
+energy.original:
+    value: 'ESSENCE'
 price:
     col: 5
     transformations:
@@ -22,6 +24,12 @@ started_at.time:
     col: 6
     transformations:
         - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%H:%M' }
+is_essence:
+    conditions:
+        - 
+            condition: 'exists("subject.energy.original") and matches("(essence)", subject["energy"]["original"], "i")'
+            returnOnSuccess: 'true'
+            returnOnFail: 'false'
 """
 
 Map = yaml.load(yamlmapping, Loader=yaml.FullLoader)

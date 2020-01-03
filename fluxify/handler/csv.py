@@ -1,5 +1,6 @@
 from helper.yamlparser import apply_value
 from transformers.transformer import handle_transformations
+from handler.conditions import handle_conditions
 import pandas as pd
 
 class CSVHandler:
@@ -25,7 +26,9 @@ class CSVHandler:
                     item = apply_value(item, key, finalvalue)
                 elif 'value' in value:
                     item = apply_value(item, key, value['value'])
-                    
+                elif 'conditions' in value:
+                    finalvalue = handle_conditions(value['conditions'], item)
+                    item = apply_value(item, key, finalvalue)
 
             result.append(item)
         
