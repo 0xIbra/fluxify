@@ -5,4 +5,10 @@ def split(transformation):
     value = transformation['value']
     delimiter = transformation['delimiter']
 
+    if 'index' in transformation:
+        index = transformation['index']
+        split = value.split(delimiter)
+
+        return split[index]
+
     return value.split(delimiter)

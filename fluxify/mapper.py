@@ -1,10 +1,6 @@
 from transformers.split import split
 
 class Mapper:
-    TRANSFORMERS = {
-        'split': split
-    }
-
     def __init__(self, Type='csv'):
         self.type = Type
     

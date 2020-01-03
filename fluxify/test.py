@@ -27,7 +27,7 @@ started_at.time:
 is_essence:
     conditions:
         - 
-            condition: 'exists("subject.energy.original") and matches("(essence)", subject["energy"]["original"], "i")'
+            condition: 'exists("subject.energy.original", subject) and matches("(essence)", subject["energy"]["original"], "i")'
             returnOnSuccess: 'true'
             returnOnFail: 'false'
 """
