@@ -20,5 +20,6 @@ class Mapper:
 
             handler = XMLHandler(filepath, mapping, item_node=item_node, root_node=root_node)
             return handler.process()
-        elif self.type == 'txt':
-            pass
+        else:
+            print('[error] Unsupported format "{}"'.format(self.type))
+            exit(1)

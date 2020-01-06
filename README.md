@@ -68,6 +68,12 @@ print(data)
 ]
 ```
 
+### Supported formats
+
+Format      | CSV | JSON | XML | TXT
+------------|-----|------|-----|-----
+Supported   | YES | YES  | YES | NO
+
 ## Transformers
 Fluxify has built-in transformers that can alter/modify the data.
 
