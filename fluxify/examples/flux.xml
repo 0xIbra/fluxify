@@ -1,0 +1,22 @@
+<people>
+    <person>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <names>
+            <firstname>John</firstname>
+            <lastname>Doe</lastname>
+        </names>
+        <age>31</age>
+        <gender>MALE</gender>
+    </person>
+    <person>
+        <firstname>Jane</firstname>
+        <lastname>Doe</lastname>
+        <names>
+            <firstname>Jane</firstname>
+            <lastname>Doe</lastname>
+        </names>
+        <age>29</age>
+        <gender>FEMALE</gender>
+    </person>
+</people>

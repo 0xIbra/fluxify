@@ -1,0 +1,19 @@
+first_name:
+  col: $subject.firstname
+last_name:
+  col: $subject.lastname
+names:
+  col: $subject.names.firstname
+full_name:
+  value: "$subject['first_name'] + ' ' + $subject['last_name']"
+age:
+  col: age
+  transformations:
+    - { transformer: 'number' }
+gender: gender
+is_18:
+  conditions:
+    -
+      condition: "$subject['age'] > 18"
+      returnOnSuccess: "$subject['age']"
+      returnOnFail: false
