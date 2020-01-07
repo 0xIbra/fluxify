@@ -14,6 +14,8 @@ setuptools.setup(
     packages=['fluxify', 'fluxify.handler', 'fluxify.helper', 'fluxify.transformers'],
     install_requires=['pandas', 'PyYAML', 'imperium'],
     classifiers=[
-        "Programming Language :: Python :: 3"
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+        "Intended Audience :: Developers"
     ]
 )
