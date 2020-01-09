@@ -6,12 +6,12 @@ import parser
 
 class CSVHandler:
 
-    def __init__(self, filepath, mapping, delimiter=',', header='infer'):
+    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False):
         self.filepath = filepath
         self.mapping = mapping
         self.delimiter = delimiter
-        
-        self.csv = pd.read_csv(filepath, skip_blank_lines=True, delimiter=delimiter, header=header)
+
+        self.csv = pd.read_csv(filepath, delimiter=delimiter, skip_blank_lines=skip_blank_lines, header=None)
 
     def process(self):
         result = []
