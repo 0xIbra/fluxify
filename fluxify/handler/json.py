@@ -26,6 +26,10 @@ class JSONHandler:
                     if 'transformations' in yaml_value:
                         finalvalue = handle_transformations(yaml_value['transformations'], finalvalue)
                     item = apply_value(item, yaml_key, finalvalue)
+
+                    if 'conditions' in yaml_value:
+                        finalvalue = handle_conditions(yaml_value['conditions'], item, jsonitem)
+                        item = apply_value(item, yaml_key, finalvalue)
                 elif 'value' in yaml_value:
                     finalvalue = yaml_value['value']
                     if type(finalvalue) == str:
@@ -34,6 +38,10 @@ class JSONHandler:
                         finalvalue = eval(expr.compile(''))
 
                     item = apply_value(item, yaml_key, finalvalue)
+
+                    if 'conditions' in yaml_value:
+                        finalvalue = handle_conditions(yaml_value['conditions'], item)
+                        item = apply_value(item, yaml_key, finalvalue)
                 elif 'conditions' in yaml_value:
                     finalvalue = handle_conditions(yaml_value['conditions'], item)
                     item = apply_value(item, yaml_key, finalvalue)

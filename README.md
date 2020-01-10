@@ -82,3 +82,7 @@ Function        | Arguments                         | Description
 **number**      | stringvalue                       | Parses a string to an **integer** or **float** value
 **split**       | delimiter, index                  | Splits a string into parts with a **delimiter** and returns the splitted result if the **index** argument is not defined.
 **date**        | in_format, out_format             | Let's you format a date string to the desired format.
+**replace**     | search, new                       | Replaces the **search** value with **new** value from string
+**boolean**     | No arguments                      | Parses a string to Boolean if the string contains [true|false|1|0]
+**equipments_from_string** | delimiter              | Custom usage
+**options_from_string**    | delimiter              | Custom usage

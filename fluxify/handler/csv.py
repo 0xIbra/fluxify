@@ -23,8 +23,11 @@ class CSVHandler:
                     finalvalue = row[col]
                     if 'transformations' in value:
                         finalvalue = handle_transformations(value['transformations'], finalvalue)
-
                     item = apply_value(item, key, finalvalue)
+
+                    if 'conditions' in value:
+                        finalvalue = handle_conditions(value['conditions'], item, row)
+                        item = apply_value(item, key, finalvalue)
                 elif 'value' in value:
                     finalvalue = value['value']
                     if type(finalvalue) == str:
@@ -33,8 +36,12 @@ class CSVHandler:
                         finalvalue = eval(expr.compile(''))
 
                     item = apply_value(item, key, finalvalue)
+
+                    if 'conditions' in value:
+                        finalvalue = handle_conditions(value['conditions'], item)
+                        item = apply_value(item, key, finalvalue)
                 elif 'conditions' in value:
-                    finalvalue = handle_conditions(value['conditions'], item)
+                    finalvalue = handle_conditions(value['conditions'], item, row)
                     item = apply_value(item, key, finalvalue)
 
             result.append(item)

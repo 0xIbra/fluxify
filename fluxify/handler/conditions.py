@@ -1,10 +1,10 @@
 from imperium.evaluator import Expression
 import re, parser
 
-def test(condition, subject):
+def test(condition, subject, source=None):
     expr = Expression()
 
-    return expr.evaluate(condition, subject)
+    return expr.evaluate(condition, subject, source)
 
 def normalize(value):
     if value == 'true':
@@ -41,7 +41,7 @@ def get(key, subject):
     return subject
 
 
-def handle_conditions(conditions, subject):
+def handle_conditions(conditions, subject, source=None):
     returnvalue = False
     for cond in conditions:
         if not 'condition' in cond:
@@ -51,18 +51,40 @@ def handle_conditions(conditions, subject):
             value = normalize(cond['returnOnSuccess'])
             if type(value) == str and '$subject.' in value:
                 value = get(value, subject)
+
             if type(value) == str and '$subject[' in value:
                 value = value.replace('$subject', 'subject')
                 expr = parser.expr(value)
 
                 value = eval(expr.compile(''))
 
-            returnvalue = value
+            if type(value) == str and '$source[' in value:
+                value = value.replace('$source', 'source')
+                expr = parser.expr(value)
+
+                value = eval(expr.compile(''))
+
+            return value
         else:
+            if not 'returnOnFail' in cond:
+                cond['returnOnFail'] = False
+
             value = normalize(cond['returnOnFail'])
-            if type(value) == str and '$subject' in value:
+            if type(value) == str and '$subject.' in value:
                 value = get(value, subject)
-            
+
+            if type(value) == str and '$subject[' in value:
+                value = value.replace('$subject', 'subject')
+                expr = parser.expr(value)
+
+                value = eval(expr.compile(''))
+
+            if type(value) == str and '$source[' in value:
+                value = value.replace('$source', 'source')
+                expr = parser.expr(value)
+
+                value = eval(expr.compile(''))
+
             returnvalue = value
     
     return returnvalue
