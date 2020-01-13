@@ -4,6 +4,7 @@ from fluxify.transformers.date import date
 from fluxify.transformers.replace import replace
 from fluxify.transformers.boolean import boolean
 from fluxify.transformers.custom import equipments_from_string, options_from_string
+from fluxify.exceptions import UnsupportedTransformerException
 
 TRANSFORMERS = {
     'number': number,
@@ -21,7 +22,7 @@ def handle_transformations(transformations, value):
         transformation['value'] = finalvalue
         transformer = transformation['transformer']
         if not transformer in TRANSFORMERS:
-            raise Exception('Unsupported transformer: "{}"'.format(transformer))
+            raise UnsupportedTransformerException('Unsupported transformer: "{}"'.format(transformer))
 
         invoker = TRANSFORMERS[transformer]
         finalvalue = invoker(transformation)

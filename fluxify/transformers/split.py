@@ -1,6 +1,8 @@
+from fluxify.exceptions import ArgumentNotFoundException
+
 def split(transformation):
     if not 'delimiter' in transformation:
-        raise Exception('"delimiter" was not found in transformation mapping.')
+        raise ArgumentNotFoundException('"delimiter" was not found in transformation mapping.')
 
     value = transformation['value']
     delimiter = transformation['delimiter']

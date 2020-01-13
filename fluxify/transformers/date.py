@@ -1,11 +1,12 @@
 from datetime import datetime
+from fluxify.exceptions import ArgumentNotFoundException
 
 def date(transformation):
     if not 'in_format' in transformation:
-        raise Exception('"in_format" was not found in transformation mapping.')
+        raise ArgumentNotFoundException('"in_format" was not found in transformation mapping.')
 
     if not 'out_format' in transformation:
-        raise Exception('"out_format" was not found in transformation mapping.')
+        raise ArgumentNotFoundException('"out_format" was not found in transformation mapping.')
 
     value = transformation['value']
     in_format = transformation['in_format']

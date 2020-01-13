@@ -5,16 +5,21 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='fluxify',
-    version='0.0.2',
+    version='0.0.3',
     author='Ibragim Abubakarov',
     author_email='ibragim.ai95@gmail.com',
     maintainer='Ibragim Abubakarov',
     maintainer_email='ibragim.ai95@gmail.com',
-    description='A Python package that eases the process of retrieving, organizing and modifying data.',
+    description='A Python package that eases the process of retrieving, organizing and altering data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/ibragim64/fluxify',
-    packages=['fluxify', 'fluxify.handler', 'fluxify.helper', 'fluxify.transformers'],
+    packages=[
+        'fluxify',
+        'fluxify.handler',
+        'fluxify.helper',
+        'fluxify.transformers'
+        ],
     install_requires=['pandas', 'PyYAML', 'imperium'],
     classifiers=[
         "Programming Language :: Python :: 3",

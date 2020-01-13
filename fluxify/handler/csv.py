@@ -6,16 +6,21 @@ import parser
 
 class CSVHandler:
 
-    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False):
+    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False, skip_header=False):
         self.filepath = filepath
         self.mapping = mapping
         self.delimiter = delimiter
+        self.skip_header = skip_header
 
         self.csv = pd.read_csv(filepath, delimiter=delimiter, skip_blank_lines=skip_blank_lines, header=None)
 
     def process(self):
         result = []
-        for data, row in self.csv.T.iteritems():
+        csv_generator = self.csv.T.iteritems()
+        if self.skip_header:
+            next(csv_generator)
+
+        for data, row in csv_generator:
             item = {}
             for key, value in self.mapping.items():
                 if 'col' in value:

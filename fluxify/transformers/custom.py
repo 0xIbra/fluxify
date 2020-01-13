@@ -1,6 +1,8 @@
+from fluxify.exceptions import ArgumentNotFoundException
+
 def equipments_from_string(transformation):
     if not 'delimiter' in transformation:
-        raise Exception('"delimiter" argument was not found in transformation mapping.')
+        raise ArgumentNotFoundException('"delimiter" argument was not found in transformation mapping.')
 
     result = []
     delimiter = transformation['delimiter']
@@ -21,7 +23,7 @@ def equipments_from_string(transformation):
 
 def options_from_string(transformation):
     if not 'delimiter' in transformation:
-        raise Exception('"delimiter" argument was not found in transformation mapping.')
+        raise ArgumentNotFoundException('"delimiter" argument was not found in transformation mapping.')
 
     result = []
     delimiter = transformation['delimiter']

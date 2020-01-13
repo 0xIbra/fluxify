@@ -1,4 +1,5 @@
 from imperium.evaluator import Expression
+from fluxify.exceptions import ConditionNotFoundException
 import re, parser
 
 def test(condition, subject, source=None):
@@ -45,9 +46,9 @@ def handle_conditions(conditions, subject, source=None):
     returnvalue = False
     for cond in conditions:
         if not 'condition' in cond:
-            raise Exception('Condition is not valid.')
+            raise ConditionNotFoundException('key "condition" was not found in mapping.')
 
-        if test(cond['condition'], subject):
+        if test(cond['condition'], subject=subject, source=source):
             value = normalize(cond['returnOnSuccess'])
             if type(value) == str and '$subject.' in value:
                 value = get(value, subject)

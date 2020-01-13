@@ -1,5 +1,5 @@
 # Fluxify
-> A Python package that eases the process of retrieving, organizing and modifying data.
+> A Python package that eases the process of retrieving, organizing and altering data.
 
 ####  Required packages
 - **pandas**
@@ -86,3 +86,14 @@ Function        | Arguments                         | Description
 **boolean**     | No arguments                      | Parses a string to Boolean if the string contains [true|false|1|0]
 **equipments_from_string** | delimiter              | Custom usage
 **options_from_string**    | delimiter              | Custom usage
+
+## Exceptions
+Fluxify has different Exception classes for different reasons
+They reside in the **exceptions** sub-package ```fluxify.exceptions```
+
+Class                                   | Arguments             | Description
+----------------------------------------|-----------------------|-------------
+**ArgumentNotFoundException**           | message               | This exception is raised whenever a argument is not found.
+**InvalidArgumentException**            | message               | This exception is raised when a passed parameter/argument is invalid.
+**ConditionNotFoundException**          | message               | This exception is raised when the "condition" key is not defined in the mapping.
+**UnsupportedTransformerException**     | message               | This exception is raised when a transformer other than the ones defined above, is used.
