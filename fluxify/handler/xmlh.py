@@ -6,11 +6,12 @@ import parser
 
 class XMLHandler:
 
-    def __init__(self, filepath, mapping, item_node, root_node=None):
+    def __init__(self, filepath, mapping, item_node, root_node=None, error_tolerance=False):
         self.filepath = filepath
         self.mapping = mapping
         self.item_node = item_node
         self.root_node = root_node
+        self.error_tolerance = error_tolerance
 
         self.xml = ET.parse(filepath)
 
@@ -23,7 +24,7 @@ class XMLHandler:
                     col = yaml_value['col']
                     finalvalue = self.get(col, xmlitem)
                     if 'transformations' in yaml_value:
-                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue)
+                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:

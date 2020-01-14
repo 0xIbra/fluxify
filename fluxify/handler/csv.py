@@ -6,11 +6,13 @@ import parser
 
 class CSVHandler:
 
-    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False, skip_header=False):
+    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False, skip_header=False, error_tolerance=False):
         self.filepath = filepath
         self.mapping = mapping
         self.delimiter = delimiter
         self.skip_header = skip_header
+
+        self.error_tolerance = error_tolerance
 
         self.csv = pd.read_csv(filepath, delimiter=delimiter, skip_blank_lines=skip_blank_lines, header=None)
 
@@ -27,7 +29,7 @@ class CSVHandler:
                     col = int(value['col'])
                     finalvalue = row[col]
                     if 'transformations' in value:
-                        finalvalue = handle_transformations(value['transformations'], finalvalue)
+                        finalvalue = handle_transformations(value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
                     item = apply_value(item, key, finalvalue)
 
                     if 'conditions' in value:
