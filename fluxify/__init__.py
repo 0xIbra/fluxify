@@ -1,1 +1,2 @@
-VERSION='0.0.1'
+from fluxify.mapper import Mapper
+from fluxify.lazy_mapper import LazyMapper

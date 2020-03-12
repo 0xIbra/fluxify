@@ -4,6 +4,7 @@ from fluxify.handler.conditions import handle_conditions
 from xml.etree import ElementTree as ET
 import parser
 
+
 class XMLHandler:
 
     def __init__(self, filepath, mapping, item_node, root_node=None, error_tolerance=False):
@@ -49,7 +50,6 @@ class XMLHandler:
             result.append(item)
 
         return result
-
 
     def get(self, key, subject):
 

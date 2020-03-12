@@ -2,10 +2,12 @@ from imperium.evaluator import Expression
 from fluxify.exceptions import ConditionNotFoundException
 import re, parser
 
+
 def test(condition, subject, source=None):
     expr = Expression()
 
     return expr.evaluate(condition, subject, source)
+
 
 def normalize(value):
     if value == 'true':
@@ -14,6 +16,7 @@ def normalize(value):
         return False
 
     return value
+
 
 def has(key, subject):
     split = key.split('.')
@@ -27,6 +30,7 @@ def has(key, subject):
         subject = subject[Key]
 
     return True
+
 
 def get(key, subject):
     split = key.split('.')

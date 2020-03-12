@@ -1,12 +1,14 @@
-from fluxify.transformers.transformer import TRANSFORMERS
-
 class Mapper:
+    CSV_FORMAT = 'csv'
+    JSON_FORMAT = 'json'
+    XML_FORMAT = 'xml'
+    FORMATS = [CSV_FORMAT, JSON_FORMAT, XML_FORMAT]
 
     def __init__(self, error_tolerance=False):
         self.error_tolerance = error_tolerance
 
-    def map(self, filepath, mapping, Type='csv', delimiter=',', skip_blank_lines=False, root_node=None, item_node=None, skip_header=False):
-        self.type = Type
+    def map(self, filepath, mapping, _type='csv', delimiter=',', skip_blank_lines=False, root_node=None, item_node=None, skip_header=False):
+        self.type = _type
 
         if self.type == 'csv':
             from fluxify.handler.csv import CSVHandler
@@ -24,5 +26,4 @@ class Mapper:
             handler = XMLHandler(filepath, mapping, item_node=item_node, root_node=root_node, error_tolerance=self.error_tolerance)
             return handler.process()
         else:
-            print('[error] Unsupported format "{}"'.format(self.type))
-            exit(1)
+            raise Exception('[error] Unsupported format "{}"'.format(self.type))

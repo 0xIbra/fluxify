@@ -1,0 +1,98 @@
+source.agency:
+    col: 1
+color.outside.original:
+    col: 2
+category.original:
+    col: 3
+identification.vin:
+    col: 5
+maker.original:
+    col: 6
+localization.storagePark:
+    col: 9
+source.id:
+    col: 10
+    transformations:
+      - { transformer: "replace", search: "id://renault.fr/offre/", new: "" }
+power.real:
+    col: 11
+emission.co2:
+    col: 12
+seats:
+    col: 13
+    transformations:
+      - { transformer: 'number' }
+version.original:
+    col: 18
+    conditions:
+      - 
+        condition: '1 == 1'
+        returnOnSuccess: '$source[43] + " " + $subject["version"]["original"]'
+        returnOnFail: '$subject["version"]["original"]'
+registration.date:
+    col: 19
+    transformations:
+      - { transformer: 'date', in_format: '%Y-%m-%d', out_format: '%d/%m/%Y' }
+energy.original:
+    col: 20
+images.0:
+    col: 21
+price.default:
+    col: 29
+    transformations:
+      - { transformer: 'number' }
+price.catalog:
+    col: 30
+    transformations:
+      - { transformer: 'number' }
+saddlery.original:
+    col: 32
+model.original:
+    col: 34
+mileage:
+    col: 35
+    transformations:
+      - { transformer: 'number' }
+source.url:
+    col: 36
+images.1:
+    col: 38
+localization.zipcode:
+    col: 40
+localization.placeName:
+    col: 42
+equipments:
+    col: 44
+    transformations:
+      - { transformer: 'equipments_from_string', delimiter: '|' }
+options:
+    col: 45
+    transformations:
+      - { transformer: 'options_from_string', delimiter: '|' }
+doors:
+    col: 22
+    conditions:
+        -
+          condition: 'matches("-4-5P", $source[3]) or matches("-5P", $source[3])'
+          returnOnSuccess: '5'
+        -
+          condition: 'matches("-3P", $source[3])'
+          returnOnSuccess: '3'
+condition.global:
+    force_value: vo
+    conditions:
+      -
+        # condition: 'out["mileage"] && out["mileage"] >= 10000 && out["registration"] && out["registration"]["number"] && out["registration"]["date"] && date(out["registration"]["date"]) < date_modify(date(), "-1 year")'
+        condition: 'exists("$subject.mileage") and $subject["mileage"] >= 10000 and exists("$subject.registration.number") and exists("$subject.registration.date") and date($subject["registration"]["date"], "%d/%m/%Y") < date_modify(date(), "-", "years", 1)'
+        returnOnSuccess: '"vo"'
+      -
+        # condition: 'out["mileage"] && out["mileage"] > 0 && out["mileage"] < 10000 && out["registration"] && out["registration"]["date"] && date(out["registration"]["date"]) >= date_modify(date(), "-1 year")'
+        condition: 'exists("$subject.mileage") and $subject["mileage"] < 10000 and exists("$subject.registration.date") and date($subject["registration"]["date"], "%d/%m/%Y") >= date_modify(date(), "-", "years", 1)'
+        returnOnSuccess: '"vd"'
+      -
+        # condition: 'out["mileage"] && out["mileage"] >= 0'
+        condition: 'exists("$subject.mileage") and $subject["mileage"] >= 0'
+        returnOnSuccess: '"vo"'
+      -
+        condition: '1 == 1'
+        returnOnSuccess: '"vn"'

@@ -8,7 +8,8 @@ age:
   col: age
   transformations:
     - { transformer: 'number' }
-gender: gender
+gender:
+  value: '"male"'
 is_18:
   conditions:
     -
