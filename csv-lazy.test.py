@@ -1,0 +1,9 @@
+from fluxify.mapper import Mapper
+import yaml, json
+
+with open('./fluxify/examples/csv.yaml', 'r') as fh:
+    Map = yaml.load(fh.read(), Loader=yaml.FullLoader)
+
+mapper = Mapper()
+data = mapper.map('./fluxify/examples/flux1-large.csv', Map, skip_header=True)
+print(json.dumps(data))
