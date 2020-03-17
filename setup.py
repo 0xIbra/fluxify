@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='fluxify',
-    version='0.0.4',
+    version='0.0.5',
     author='Ibragim Abubakarov',
     author_email='ibragim.ai95@gmail.com',
     maintainer='Ibragim Abubakarov',
@@ -20,7 +20,7 @@ setuptools.setup(
         'fluxify.helper',
         'fluxify.transformers'
         ],
-    install_requires=['pandas', 'PyYAML', 'imperium'],
+    install_requires=['pandas', 'PyYAML', 'imperium', 'ijson'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",

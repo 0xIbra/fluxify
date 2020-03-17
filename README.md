@@ -11,6 +11,13 @@
 pip install fluxify
 ```
 
+## Main classes
+#####  `fluxify.mapper.Mapper`
+This class is used read and processing fast files with small amounts of data that can be loaded into memory.
+
+##### `fluxify.lazy_mapper.LazyMapper`
+You've probable guessed it, this class is used to iterate on large files of data wether it is of format CSV, JSON or XML. 
+
 ## Usage
 Retrieve data from a simple CSV file
 ```csv
@@ -18,7 +25,7 @@ id,brand,price,state,published_at
 938,Xaomi,390.90,used,2020-01-03 12:32:29
 04593,iPhone,1299.90,new,2020-01-02 09:48:12
 ```
-#### Implementation
+#### Mapper implementation
 ```python
 from fluxify.mapper import Mapper
 import yaml
@@ -44,12 +51,12 @@ is_new:
 """
 
 Map = yaml.load(yamlmapping, Loader=yaml.FullLoader)
-mapper = Mapper()
+mapper = Mapper(_type='csv')
 data = mapper.map('path/to/csvfile.csv', Map)
 print(data)
 ```
 **Output**
-```python
+```bash
 [
     {
         'brand': 'Xaomi',
@@ -67,6 +74,47 @@ print(data)
     }
 ]
 ```
+
+#### LazyMapper implementation
+The `LazyMapper` does not return all the mapped data at the end, instead it maps the data in small sizes that you can specify in order to not max out the memory.
+
+```python
+from fluxify.lazy_mapper import LazyMapper
+import yaml
+
+# Could also be loaded from a file
+yamlmapping = """
+brand:
+    col: 1
+price:
+    col: 2
+state:
+    col: 3
+publish_date:
+    col: 4
+    transformations:
+        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M:%S', out_format: '%H:%M %d/%m/%Y' }
+is_new:
+    conditions:
+        -
+            condition: "subject['state'] == 'new'"
+            returnOnSuccess: True
+            returnOnFail: False
+"""
+
+Map = yaml.load(yamlmapping, Loader=yaml.FullLoader)
+mapper = LazyMapper(_type='csv', error_tolerance=True, bulksize=500)
+mapper.map('path/to/csvfile.csv', Map)
+
+def some_callback(results):
+    for item in results:
+        pass # Perform some action
+
+mapper.set_callback(some_callback)
+
+mapper.map('path/to/csvfile.csv', Map)
+```
+As you can see, in this example the mapper will call the callback function every time it accumulates 500 mapped items.
 
 ### Supported formats
 

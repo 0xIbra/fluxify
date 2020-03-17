@@ -1,7 +1,7 @@
 from fluxify.helper.yamlparser import apply_value
 from fluxify.transformers.transformer import handle_transformations
 from fluxify.handler.conditions import handle_conditions
-from xml.etree import ElementTree as ET
+from fluxify.utils import Utils
 import parser
 
 
@@ -14,9 +14,11 @@ class XMLHandler:
         self.root_node = root_node
         self.error_tolerance = error_tolerance
 
-        self.xml = ET.parse(filepath)
-
     def process(self):
+        from xml.etree import ElementTree as ET
+
+        self.xml = ET.parse(self.filepath)
+
         result = []
         for xmlitem in self.xml.findall(self.item_node):
             item = {}
@@ -46,10 +48,71 @@ class XMLHandler:
                 elif 'conditions' in yaml_value:
                     finalvalue = handle_conditions(yaml_value['conditions'], item)
                     item = apply_value(item, yaml_key, finalvalue)
+                else:
+                    text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(yaml_key)
+                    if self.error_tolerance:
+                        Utils.log('error', text)
+                        continue
+                    else:
+                        raise Exception(text)
 
             result.append(item)
 
         return result
+
+    def lazy_process(self):
+        import lxml.etree as ET
+
+        self.xml = ET.iterparse(self.filepath)
+
+        result = []
+        for ev, elem in self.xml:
+            if elem.tag == self.item_node:
+
+                item = {}
+                for map_key, map_value in self.mapping.items():
+                    if 'col' in map_value:
+                        col = map_value['col']
+                        finalvalue = self.get(col, elem)
+                        if 'transformations' in map_value:
+                            finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
+
+                        item = apply_value(item, map_key, finalvalue)
+
+                        if 'conditions' in map_value:
+                            finalvalue = handle_conditions(map_value['conditions'], item)
+                            item = apply_value(item, map_key, finalvalue)
+                    elif 'value' in map_value:
+                        finalvalue = map_value['value']
+                        if type(finalvalue) == str:
+                            finalvalue = finalvalue.replace('$subject', 'item')
+                            expr = parser.expr(finalvalue)
+                            finalvalue = eval(expr.compile(''))
+
+                        item = apply_value(item, map_key, finalvalue)
+
+                        if 'conditions' in map_value:
+                            finalvalue = handle_conditions(map_value['conditions'], item)
+                            item = apply_value(item, map_key, finalvalue)
+                    elif 'conditions' in map_value:
+                        finalvalue = handle_conditions(map_value['conditions'], item)
+                        item = apply_value(item, map_key, finalvalue)
+                    else:
+                        text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(map_key)
+                        if self.error_tolerance:
+                            Utils.log('error', text)
+                            continue
+                        else:
+                            raise Exception(text)
+
+                result.append(item)
+                if (len(result) % self.bulksize) == 0:
+                    self.callback(result)
+                    result = []
+
+        if len(result) > 0:
+            self.callback(result)
+            result = []
 
     def get(self, key, subject):
 
@@ -69,3 +132,10 @@ class XMLHandler:
                 subject = value
 
         return subject
+
+    def set_bulksize(self, size):
+        self.bulksize = size
+
+    def set_callback(self, callback):
+        self.callback = callback
+

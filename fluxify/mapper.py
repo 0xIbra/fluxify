@@ -4,12 +4,11 @@ class Mapper:
     XML_FORMAT = 'xml'
     FORMATS = [CSV_FORMAT, JSON_FORMAT, XML_FORMAT]
 
-    def __init__(self, error_tolerance=False):
+    def __init__(self, _type='csv', error_tolerance=False):
+        self.type = _type
         self.error_tolerance = error_tolerance
 
-    def map(self, filepath, mapping, _type='csv', delimiter=',', skip_blank_lines=False, root_node=None, item_node=None, skip_header=False):
-        self.type = _type
-
+    def map(self, filepath, mapping, delimiter=',', skip_blank_lines=False, root_node=None, item_node=None, skip_header=False):
         if self.type == 'csv':
             from fluxify.handler.csv import CSVHandler
 
