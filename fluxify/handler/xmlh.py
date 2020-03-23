@@ -3,6 +3,7 @@ from fluxify.transformers.transformer import handle_transformations
 from fluxify.handler.conditions import handle_conditions
 from fluxify.utils import Utils
 import parser
+import gc
 
 
 class XMLHandler:
@@ -66,9 +67,9 @@ class XMLHandler:
         self.xml = ET.iterparse(self.filepath)
 
         result = []
-        for ev, elem in self.xml:
-            if elem.tag == self.item_node:
+        for ev, elem in iter(self.xml):
 
+            if elem.tag == self.item_node:
                 item = {}
                 for map_key, map_value in self.mapping.items():
                     if 'col' in map_value:
@@ -108,11 +109,19 @@ class XMLHandler:
                 result.append(item)
                 if (len(result) % self.bulksize) == 0:
                     self.callback(result)
-                    result = []
+                    result.clear()
+                    gc.collect()
+
+                # Clearing the element now that the values have been extracted
+                elem.clear()
+                for ancestor in elem.xpath('ancestor-or-self::*'):
+                    while ancestor.getprevious() is not None:
+                        del ancestor.getparent()[0]
 
         if len(result) > 0:
             self.callback(result)
-            result = []
+            result.clear()
+            gc.collect()
 
     def get(self, key, subject):
 

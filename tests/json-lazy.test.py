@@ -1,4 +1,4 @@
-from fluxify import LazyMapper
+from fluxify.lazy_mapper import LazyMapper
 import yaml, json
 
 with open('./fluxify/examples/json.yaml', 'r') as fh:
@@ -6,16 +6,10 @@ with open('./fluxify/examples/json.yaml', 'r') as fh:
 
 
 def test_function(results):
-    print('COUNT: {}'.format(str(len(results))))
-    js = json.dumps(results)
-    with open('output.json', 'w') as fh:
-        fh.write(js)
-
-    print(js)
-    exit()
+    print(results)
 
 
-mapper = LazyMapper(_type=LazyMapper.JSON_FORMAT, error_tolerance=True, bulksize=30)
+mapper = LazyMapper(_type=LazyMapper.JSON_FORMAT, error_tolerance=True, bulksize=20)
 mapper.set_callback(test_function)
 
 mapper.map('./fluxify/examples/flux-large.json', jsonmap)

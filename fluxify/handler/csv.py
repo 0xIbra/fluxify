@@ -4,6 +4,7 @@ from fluxify.handler.conditions import handle_conditions
 from fluxify.utils import Utils
 import pandas as pd
 import parser
+import gc
 
 
 class CSVHandler:
@@ -16,7 +17,7 @@ class CSVHandler:
         self.skip_header = skip_header
         self.bulksize = bulksize
 
-        self.error_tolerance = error_tolerance
+        self.__error_tolerance = error_tolerance
 
     def process(self):
         self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
@@ -37,7 +38,7 @@ class CSVHandler:
                     finalvalue = data[col]
 
                     if 'transformations' in map_value:
-                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
+                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, map_key, finalvalue)
 
@@ -61,7 +62,7 @@ class CSVHandler:
                     item = apply_value(item, map_key, finalvalue)
                 else:
                     text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(map_key)
-                    if self.error_tolerance:
+                    if self.__error_tolerance:
                         Utils.log('error', text)
                         continue
                     else:
@@ -89,7 +90,7 @@ class CSVHandler:
                     finalvalue = data[col]
 
                     if 'transformations' in map_value:
-                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=False)
+                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, map_key, finalvalue)
 
@@ -116,7 +117,7 @@ class CSVHandler:
                     item = apply_value(item, map_key, finalvalue)
                 else:
                     text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(map_key)
-                    if self.error_tolerance:
+                    if self.__error_tolerance:
                         Utils.log('error', text)
                         continue
                     else:
@@ -126,10 +127,12 @@ class CSVHandler:
             if (self.bulksize % len(result)) == 0:
                 self.callback(result)
                 result = []
+                gc.collect()
 
         if len(result) > 0:
             self.callback(result)
             result = []
+            gc.collect()
 
     def set_bulksize(self, size):
         self.bulksize = size

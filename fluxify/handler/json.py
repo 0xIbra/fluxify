@@ -3,6 +3,7 @@ from fluxify.helper.yamlparser import apply_value
 from fluxify.transformers.transformer import handle_transformations
 from fluxify.utils import Utils
 import parser
+import gc
 
 
 class JSONHandler:
@@ -30,7 +31,7 @@ class JSONHandler:
                     col = yaml_value['col']
                     finalvalue = self.get(col, jsonitem)
                     if 'transformations' in yaml_value:
-                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
+                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:
@@ -117,10 +118,12 @@ class JSONHandler:
                 if len(results) % self.__bulksize == 0:
                     self.__callback(results)
                     results = []
+                    gc.collect()
 
             if len(results) > 0:
                 self.__callback(results)
                 results = []
+                gc.collect()
 
     def get(self, key, subject):
         split = key.split('.')

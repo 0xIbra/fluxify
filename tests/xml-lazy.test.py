@@ -11,6 +11,6 @@ def callback(results):
 
 mapper = LazyMapper(_type='xml')
 mapper.set_callback(callback)
-mapper.set_bulksize(10)
+mapper.set_bulksize(200)
 
-mapper.map('./fluxify/examples/flux-large.xml', Map, item_node='person')
+mapper.map('./fluxify/examples/flux-large.xml', Map, root_node='people', item_node='person')

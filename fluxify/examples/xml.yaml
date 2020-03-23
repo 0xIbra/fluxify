@@ -5,7 +5,7 @@ last_name:
 names:
   col: $subject.names.firstname
 full_name:
-  value: "$subject['first_name'] + ' ' + $subject['last_name']"
+  value: "str($subject['first_name']) + ' ' + str($subject['last_name'])"
 age:
   col: age
   transformations:
