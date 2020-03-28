@@ -124,7 +124,7 @@ class CSVHandler:
                         raise Exception(text)
 
             result.append(item)
-            if (self.bulksize % len(result)) == 0:
+            if (len(result) % self.bulksize) == 0:
                 self.callback(result)
                 result = []
                 gc.collect()

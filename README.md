@@ -3,8 +3,8 @@
 
 ####  Required packages
 - **pandas**
-- **PyYAML==5.2**
 - **imperium**
+- **ijson**
 
 ## Installation
 ```bash
