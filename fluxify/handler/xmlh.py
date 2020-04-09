@@ -8,12 +8,15 @@ import gc
 
 class XMLHandler:
 
-    def __init__(self, filepath, mapping, item_node, root_node=None, error_tolerance=False):
+    def __init__(self, filepath, mapping, item_node, root_node=None, error_tolerance=False,
+                 save_unmatched=True, unmatched_key='unmatched'):
         self.filepath = filepath
         self.mapping = mapping
         self.item_node = item_node
         self.root_node = root_node
         self.error_tolerance = error_tolerance
+        self.__save_unmatched = save_unmatched
+        self.__unmatched_key = unmatched_key
 
     def process(self):
         from xml.etree import ElementTree as ET
@@ -34,6 +37,10 @@ class XMLHandler:
                     if 'conditions' in yaml_value:
                         finalvalue = handle_conditions(yaml_value['conditions'], item)
                         item = apply_value(item, yaml_key, finalvalue)
+
+                    # Deleting the value from original input object
+                    if self.__save_unmatched:
+                        self.__delete(col, xmlitem)
                 elif 'value' in yaml_value:
                     finalvalue = yaml_value['value']
                     if type(finalvalue) == str:
@@ -59,6 +66,10 @@ class XMLHandler:
                         continue
                     else:
                         raise Exception(text)
+
+            # Unmatched
+            if self.__save_unmatched:
+                item[self.__unmatched_key] = self.__get_unmatched(xmlitem)
 
             result.append(item)
 
@@ -86,6 +97,10 @@ class XMLHandler:
                         if 'conditions' in map_value:
                             finalvalue = handle_conditions(map_value['conditions'], item)
                             item = apply_value(item, map_key, finalvalue)
+
+                        # Deleting the value from original input object
+                        if self.__save_unmatched:
+                            self.__delete(col, elem)
                     elif 'value' in map_value:
                         finalvalue = map_value['value']
                         if type(finalvalue) == str:
@@ -111,6 +126,10 @@ class XMLHandler:
                             continue
                         else:
                             raise Exception(text)
+
+                # Unmatched
+                if self.__save_unmatched:
+                    item[self.__unmatched_key] = self.__get_unmatched(elem)
 
                 result.append(item)
                 if (len(result) % self.bulksize) == 0:
@@ -150,6 +169,38 @@ class XMLHandler:
         subject = Utils.clean_if_nan(subject)
 
         return subject
+
+    def __get_unmatched(self, xmlitem, inputunmatched=None):
+        unmatched = {}
+        if inputunmatched is not None:
+            unmatched = inputunmatched
+
+        for ix, item in enumerate(list(xmlitem)):
+            if self.__has_children(item):
+                unmatched[item.tag] = {}
+                self.__get_unmatched(item, unmatched[item.tag])
+            else:
+                unmatched[item.tag] = item.text
+
+        return unmatched
+
+    def __delete(self, key: str, subject):
+        split = key.split('.')
+        for ix, val in enumerate(split):
+            if '$subject' == val:
+                continue
+
+            if ix != len(split) - 1:
+                subject = subject.find(val)
+                if subject is None:
+                    return False
+            else:
+                subject.remove(subject.find(val))
+
+        return True
+
+    def __has_children(self, element):
+        return True if len(list(element)) else False
 
     def set_bulksize(self, size):
         self.bulksize = size

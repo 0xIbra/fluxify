@@ -5,7 +5,8 @@
             "lastname": "Doe"
         },
         "age": "34",
-        "gender": "MALE"
+        "gender": "MALE",
+        "job": "Software engineer"
     },
     {
         "name": {
@@ -13,6 +14,13 @@
             "lastname": "Doe"
         },
         "age": "29",
-        "gender": "FEMALE"
+        "gender": "FEMALE",
+        "job": "Data scientist",
+        "social_media": [
+            "facebook",
+            "twitter",
+            "linkedin",
+            "instagram"
+        ]
     }
 ]

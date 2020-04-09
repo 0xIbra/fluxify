@@ -8,12 +8,14 @@ import gc
 
 class JSONHandler:
 
-    def __init__(self, filepath, mapping, root_node=None, error_tolerance=False, bulksize=100):
+    def __init__(self, filepath, mapping, root_node=None, error_tolerance=False, bulksize=100, save_unmatched=True, unmatched_key='unmatched'):
         self.__filepath = filepath
         self.__mapping = mapping
         self.__root_node = root_node
         self.__error_tolerance = error_tolerance
         self.__bulksize = bulksize
+        self.__save_unmatched = save_unmatched
+        self.__unmatched_key = unmatched_key
 
     def process(self):
         import json
@@ -38,6 +40,10 @@ class JSONHandler:
                     if 'conditions' in yaml_value:
                         finalvalue = handle_conditions(yaml_value['conditions'], item, jsonitem)
                         item = apply_value(item, yaml_key, finalvalue)
+
+                    # Deleting the value from original input object
+                    if self.__save_unmatched:
+                        self.__delete(col, jsonitem)
                 elif 'value' in yaml_value:
                     finalvalue = yaml_value['value']
                     if type(finalvalue) == str:
@@ -60,6 +66,10 @@ class JSONHandler:
                     Utils.clean_if_nan(finalvalue)
 
                     item = apply_value(item, yaml_key, finalvalue)
+
+            # Unmatched
+            if self.__save_unmatched:
+                item[self.__unmatched_key] = self.__get_unmatched(jsonitem)
 
             result.append(item)
 
@@ -98,6 +108,11 @@ class JSONHandler:
                         if 'conditions' in yaml_value:
                             finalvalue = handle_conditions(yaml_value['conditions'], item, jsonobject)
                             item = apply_value(item, yaml_key, finalvalue)
+
+                        # Deleting the value from original input object
+                        if self.__save_unmatched:
+                            self.__delete(col, jsonobject)
+
                     elif 'value' in yaml_value:
                         finalvalue = yaml_value['value']
                         if type(finalvalue) == str:
@@ -124,6 +139,10 @@ class JSONHandler:
                         else:
                             raise Exception(text)
 
+                # Unmatched
+                if self.__save_unmatched:
+                    item[self.__unmatched_key] = self.__get_unmatched(jsonobject)
+
                 results.append(item)
 
                 if len(results) % self.__bulksize == 0:
@@ -148,6 +167,50 @@ class JSONHandler:
         subject = Utils.clean_if_nan(subject)
 
         return subject
+
+    def __delete(self, key: str, subject):
+        split = key.split('.')
+        for ix, val in enumerate(split):
+            if val not in subject:
+                return False
+
+            if ix != len(split) - 1:
+                subject = subject[val]
+            else:
+                del subject[val]
+
+        return True
+
+    def __get_unmatched(self, item: dict):
+        unmatched = {}
+        for (key, value) in item.items():
+            if not JSONHandler.empty(value):
+                unmatched[key] = value
+
+        return unmatched
+
+    @staticmethod
+    def empty(value):
+        if value is None:
+            return True
+
+        if value == '':
+            return True
+
+        if value == ' ':
+            return True
+
+        if type(value) is list:
+            if len(value) <= 0:
+                return True
+            else:
+                return False
+
+        if value == {}:
+            return True
+
+        return False
+
 
     def set_bulksize(self, size):
         self.__bulksize = size

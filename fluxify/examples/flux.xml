@@ -6,8 +6,14 @@
             <firstname>John</firstname>
             <lastname>Doe</lastname>
         </names>
+        <information>
+            <about>
+                <bio>Just a test.</bio>
+            </about>
+        </information>
         <age>31</age>
         <gender>MALE</gender>
+        <job>Software Engineer</job>
     </person>
     <person>
         <firstname>Jane</firstname>
@@ -18,6 +24,7 @@
         </names>
         <age>29</age>
         <gender>FEMALE</gender>
+        <job>Data scientist</job>
     </person>
     <person>
         <firstname>Jane</firstname>

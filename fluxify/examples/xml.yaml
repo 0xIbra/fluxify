@@ -1,9 +1,9 @@
 first_name:
-  col: $subject.firstname
+  col: firstname
 last_name:
-  col: $subject.lastname
+  col: lastname
 names:
-  col: $subject.names.firstname
+  col: names.firstname
 full_name:
   value: "str($subject['first_name']) + ' ' + str($subject['last_name'])"
 age:

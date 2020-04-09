@@ -3,19 +3,24 @@ from fluxify.transformers.transformer import handle_transformations
 from fluxify.handler.conditions import handle_conditions
 from fluxify.utils import Utils
 import pandas as pd
+import numpy as np
 import parser
 import gc
 
 
 class CSVHandler:
 
-    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False, skip_header=False, error_tolerance=False, bulksize=100):
+    def __init__(self, filepath, mapping, delimiter=',', skip_blank_lines=False, skip_header=False, error_tolerance=False,
+                 bulksize=100, save_unmatched=True, unmatched_key='unmatched'):
+
         self.filepath = filepath
         self.mapping = mapping
         self.delimiter = delimiter
         self.skip_blank_lines = skip_blank_lines
         self.skip_header = skip_header
         self.bulksize = bulksize
+        self.__save_unmatched = save_unmatched
+        self.__unmatched_key = unmatched_key
 
         self.__error_tolerance = error_tolerance
 
@@ -23,14 +28,18 @@ class CSVHandler:
         self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
         self.csv = self.csv.values
 
+        labels = None
         result = []
 
         for it, data in enumerate(self.csv):
             # Skipping the first line if needed
             if self.skip_header and it == 0:
+                labels = data
+
                 continue
 
             item = {}
+            cols_to_delete = []
             for map_key, map_value in self.mapping.items():
 
                 if 'col' in map_value:
@@ -48,6 +57,10 @@ class CSVHandler:
                     if 'conditions' in map_value:
                         finalvalue = handle_conditions(map_value['conditions'], item, data)
                         item = apply_value(item, map_key, finalvalue)
+
+                    # To remember which cols have already been retrieved
+                    if self.__save_unmatched:
+                        cols_to_delete.append(col)
                 elif 'value' in map_value:
                     finalvalue = map_value['value']
                     if type(finalvalue) == str:
@@ -74,6 +87,13 @@ class CSVHandler:
                     else:
                         raise Exception(text)
 
+            # Unmatched
+            if self.__save_unmatched:
+                for col in cols_to_delete:
+                    data[col] = None
+
+                item[self.__unmatched_key] = self.__get_unmatched(data, labels)
+
             result.append(item)
 
         return result
@@ -82,13 +102,17 @@ class CSVHandler:
         self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
         csv_generator = self.csv.T.iteritems()
 
+        ix = None
+        labels = []
         result = []
 
         if self.skip_header:
-            next(csv_generator)
+            ix, labels = next(csv_generator)
 
         for it, data in csv_generator:
             item = {}
+            cols_to_delete = []
+
             # Iterating through the mapping
             for map_key, map_value in self.mapping.items():
                 if 'col' in map_value:
@@ -106,6 +130,10 @@ class CSVHandler:
                     if 'conditions' in map_value:
                         finalvalue = handle_conditions(map_value['conditions'], item, data)
                         item = apply_value(item, map_key, finalvalue)
+
+                    # To remember which cols have already been retrieved
+                    if self.__save_unmatched:
+                        cols_to_delete.append(col)
                 elif 'value' in map_value:
                     finalvalue = map_value['value']
                     if type(finalvalue) == str:
@@ -135,6 +163,13 @@ class CSVHandler:
                     else:
                         raise Exception(text)
 
+            # Unmatched
+            if self.__save_unmatched:
+                for col in cols_to_delete:
+                    data[col] = None
+
+                item[self.__unmatched_key] = self.__get_unmatched(data, labels)
+
             result.append(item)
             if (len(result) % self.bulksize) == 0:
                 self.callback(result)
@@ -145,6 +180,27 @@ class CSVHandler:
             self.callback(result)
             result = []
             gc.collect()
+
+    def __get_unmatched(self, data, labels):
+        unmatched = {}
+        for ix, col in enumerate(data):
+            if col is not None:
+                if self.__has(labels, ix):
+                    label = labels[ix]
+                else:
+                    label = str(ix)
+
+                unmatched[label] = col
+
+        return unmatched
+
+    def __has(self, list: list, index):
+        try:
+            list[index]
+
+            return True
+        except Exception as e:
+            return False
 
     def set_bulksize(self, size):
         self.bulksize = size

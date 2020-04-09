@@ -1,3 +1,3 @@
-id,maker,model,generation,gearbox,price,mileage,registration_date,created_at,doors
-12334234,BMW,Serie 5,F10,Automatique,24900,7400,2015-09-20,2019-10-03 12:39,5P
-04593,BMW,Serie 3,F30,Automatique,21090,11300,2014-02-19,2019-11-19 09:48,5P
+id,maker,model,generation,gearbox,price,mileage,registration_date,created_at,doors,vehicle_type
+12334234,BMW,Serie 5,F10,Automatique,24900,7400,2015-09-20,2019-10-03 12:39,5P,VP
+04593,BMW,Serie 3,F30,Automatique,21090,11300,2014-02-19,2019-11-19 09:48,5P,VP
