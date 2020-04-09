@@ -1,11 +1,11 @@
 first_name:
-  col: name
-  transformations:
-    - { transformer: 'split', delimiter: ' ', index: 0 }
+  col: name.firstname
+#  transformations:
+#    - { transformer: 'split', delimiter: ' ', index: 0 }
 last_name:
-  col: name
-  transformations:
-    - { transformer: 'split', delimiter: ' ', index: 1 }
+  col: name.lastname
+#  transformations:
+#    - { transformer: 'split', delimiter: ' ', index: 1 }
 full_name:
   value: "$subject['first_name'] + ' ' + $subject['last_name']"
 age:

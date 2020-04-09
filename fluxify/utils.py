@@ -1,4 +1,5 @@
 from datetime import datetime
+import math
 
 
 class Utils:
@@ -17,3 +18,20 @@ class Utils:
         _format = '%H:%M:%S %d-%m-%Y'
         text = '{} - [{}] : {}'.format(Utils.getdatetime(format=_format), level, message)
         print(text)
+
+    @staticmethod
+    def clean_if_nan(value):
+        if type(value) is int or type(value) is float:
+            if math.isnan(value):
+                value = None
+
+        return value
+
+    @staticmethod
+    def check_for_nan(value):
+        if type(value) is int or type(value) is float:
+            if math.isnan(value):
+                return True
+
+        return False
+

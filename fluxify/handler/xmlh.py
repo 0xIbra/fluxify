@@ -41,6 +41,9 @@ class XMLHandler:
                         expr = parser.expr(finalvalue)
                         finalvalue = eval(expr.compile(''))
 
+                    # Set to None if value is NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
+
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:
@@ -89,6 +92,9 @@ class XMLHandler:
                             finalvalue = finalvalue.replace('$subject', 'item')
                             expr = parser.expr(finalvalue)
                             finalvalue = eval(expr.compile(''))
+
+                        # Set to None if value is NaN
+                        finalvalue = Utils.clean_if_nan(finalvalue)
 
                         item = apply_value(item, map_key, finalvalue)
 
@@ -139,6 +145,9 @@ class XMLHandler:
                 subject = value.text
             else:
                 subject = value
+
+        # Set to None if value is NaN
+        subject = Utils.clean_if_nan(subject)
 
         return subject
 

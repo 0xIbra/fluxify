@@ -1,5 +1,6 @@
 from fluxify.exceptions import ArgumentNotFoundException, InvalidArgumentException
 
+
 def boolean(transformation):
     if not 'value' in transformation:
         raise ArgumentNotFoundException('[transformation][replace] "value" argument was not found in transformation mapping.')

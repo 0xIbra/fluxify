@@ -16,6 +16,7 @@ TRANSFORMERS = {
     'options_from_string': options_from_string
 }
 
+
 def handle_transformations(transformations, value, error_tolerance=False):
     finalvalue = value
     for transformation in transformations:

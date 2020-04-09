@@ -1,6 +1,7 @@
 from datetime import datetime
 from fluxify.exceptions import ArgumentNotFoundException
 
+
 def date(transformation):
     if not 'in_format' in transformation:
         raise ArgumentNotFoundException('"in_format" was not found in transformation mapping.')

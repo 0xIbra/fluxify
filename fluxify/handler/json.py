@@ -32,6 +32,7 @@ class JSONHandler:
                     finalvalue = self.get(col, jsonitem)
                     if 'transformations' in yaml_value:
                         finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
+
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:
@@ -44,6 +45,9 @@ class JSONHandler:
                         expr = parser.expr(finalvalue)
                         finalvalue = eval(expr.compile(''))
 
+                    # Clean if NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
+
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:
@@ -51,6 +55,10 @@ class JSONHandler:
                         item = apply_value(item, yaml_key, finalvalue)
                 elif 'conditions' in yaml_value:
                     finalvalue = handle_conditions(yaml_value['conditions'], item)
+
+                    # Set to None if value is NaN
+                    Utils.clean_if_nan(finalvalue)
+
                     item = apply_value(item, yaml_key, finalvalue)
 
             result.append(item)
@@ -97,6 +105,9 @@ class JSONHandler:
                             expr = parser.expr(finalvalue)
                             finalvalue = eval(expr.compile(''))
 
+                        # Set to None if value is NaN
+                        finalvalue = Utils.clean_if_nan(finalvalue)
+
                         item = apply_value(item, yaml_key, finalvalue)
 
                         if 'conditions' in yaml_value:
@@ -131,6 +142,10 @@ class JSONHandler:
             if not val in subject:
                 return False
             subject = subject[val]
+
+
+        # Set to None if value is NaN
+        subject = Utils.clean_if_nan(subject)
 
         return subject
 

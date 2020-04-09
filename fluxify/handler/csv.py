@@ -37,6 +37,9 @@ class CSVHandler:
                     col = int(map_value['col'])
                     finalvalue = data[col]
 
+                    # Set to None if value is NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
+
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
@@ -51,6 +54,9 @@ class CSVHandler:
                         finalvalue = finalvalue.replace('$subject', 'item')
                         expr = parser.expr(finalvalue)
                         finalvalue = eval(expr.compile(''))
+
+                    # Set to None if value is NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
 
                     item = apply_value(item, map_key, finalvalue)
 
@@ -89,6 +95,9 @@ class CSVHandler:
                     col = int(map_value['col'])
                     finalvalue = data[col]
 
+                    # Set to None if value is NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
+
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
@@ -103,6 +112,9 @@ class CSVHandler:
                         finalvalue = finalvalue.replace('$subject', 'item')
                         expr = parser.expr(finalvalue)
                         finalvalue = eval(expr.compile(''))
+
+                    # Set to None if value is NaN
+                    finalvalue = Utils.clean_if_nan(finalvalue)
 
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=True)
