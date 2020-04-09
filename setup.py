@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='fluxify',
-    version='0.0.8',
+    version='0.0.9',
     author='Ibragim Abubakarov',
     author_email='ibragim.ai95@gmail.com',
     maintainer='Ibragim Abubakarov',
