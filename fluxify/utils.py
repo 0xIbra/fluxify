@@ -35,3 +35,18 @@ class Utils:
 
         return False
 
+    @staticmethod
+    def empty(value):
+        if value == '' or value == ' ':
+            return True
+
+        if value is None:
+            return True
+
+        if value == {}:
+            return True
+
+        if type(value) is list:
+            return len(value) <= 0
+
+        return False

@@ -180,7 +180,9 @@ class XMLHandler:
                 unmatched[item.tag] = {}
                 self.__get_unmatched(item, unmatched[item.tag])
             else:
-                unmatched[item.tag] = item.text
+                value = Utils.clean_if_nan(item.text)
+                if value is not None and not Utils.empty(value):
+                    unmatched[item.tag] = value
 
         return unmatched
 

@@ -190,7 +190,9 @@ class CSVHandler:
                 else:
                     label = str(ix)
 
-                unmatched[label] = col
+                col = Utils.clean_if_nan(col)
+                if col is not None and not Utils.empty(col):
+                    unmatched[label] = col
 
         return unmatched
 

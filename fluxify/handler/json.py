@@ -184,33 +184,12 @@ class JSONHandler:
     def __get_unmatched(self, item: dict):
         unmatched = {}
         for (key, value) in item.items():
-            if not JSONHandler.empty(value):
-                unmatched[key] = value
+            if not Utils.empty(value):
+                value = Utils.clean_if_nan(value)
+                if value is not None:
+                    unmatched[key] = value
 
         return unmatched
-
-    @staticmethod
-    def empty(value):
-        if value is None:
-            return True
-
-        if value == '':
-            return True
-
-        if value == ' ':
-            return True
-
-        if type(value) is list:
-            if len(value) <= 0:
-                return True
-            else:
-                return False
-
-        if value == {}:
-            return True
-
-        return False
-
 
     def set_bulksize(self, size):
         self.__bulksize = size
