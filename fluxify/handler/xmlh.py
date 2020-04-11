@@ -18,6 +18,10 @@ class XMLHandler:
         self.__save_unmatched = save_unmatched
         self.__unmatched_key = unmatched_key
 
+        self.__stats = {
+            'total_count': 0
+        }
+
     def process(self):
         from xml.etree import ElementTree as ET
 
@@ -25,6 +29,9 @@ class XMLHandler:
 
         result = []
         for xmlitem in self.xml.findall(self.item_node):
+            # Updating stats
+            self.__stats['total_count'] += 1
+
             item = {}
             for yaml_key, yaml_value in self.mapping.items():
                 if 'col' in yaml_value:
@@ -84,6 +91,9 @@ class XMLHandler:
         for ev, elem in iter(self.xml):
 
             if elem.tag == self.item_node:
+                # Updating stats
+                self.__stats['total_count'] += 1
+
                 item = {}
                 for map_key, map_value in self.mapping.items():
                     if 'col' in map_value:
@@ -210,3 +220,5 @@ class XMLHandler:
     def set_callback(self, callback):
         self.callback = callback
 
+    def get_stats(self):
+        return self.__stats

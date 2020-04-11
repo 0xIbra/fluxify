@@ -7,3 +7,4 @@ with open('./fluxify/examples/xml.yaml', 'r') as fh:
 mapper = Mapper(_type='xml')
 data = mapper.map('./fluxify/examples/flux.xml', Map, item_node='person')
 print(data)
+print('STATS : ', mapper.get_stats())

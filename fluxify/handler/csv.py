@@ -24,6 +24,12 @@ class CSVHandler:
 
         self.__error_tolerance = error_tolerance
 
+        self.__stats = {
+            'header_skipped': False,
+            'total_count': 0,
+            'total_count_with_header': 0
+        }
+
     def process(self):
         self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
         self.csv = self.csv.values
@@ -32,11 +38,20 @@ class CSVHandler:
         result = []
 
         for it, data in enumerate(self.csv):
+            # Updating stats
+            self.__stats['total_count_with_header'] += 1
+
             # Skipping the first line if needed
             if self.skip_header and it == 0:
                 labels = data
 
+                # Updating stats
+                self.__stats['header_skipped'] = True
+
                 continue
+
+            # Updating stats
+            self.__stats['total_count'] += 1
 
             item = {}
             cols_to_delete = []
@@ -108,10 +123,17 @@ class CSVHandler:
 
         if self.skip_header:
             ix, labels = next(csv_generator)
+            # Updating stats
+            self.__stats['header_skipped'] = True
+            self.__stats['total_count_with_header'] += 1
 
         for it, data in csv_generator:
             item = {}
             cols_to_delete = []
+
+            # Updating stats
+            self.__stats['total_count'] += 1
+            self.__stats['total_count_with_header'] += 1
 
             # Iterating through the mapping
             for map_key, map_value in self.mapping.items():
@@ -209,3 +231,6 @@ class CSVHandler:
 
     def set_callback(self, callback):
         self.callback = callback
+
+    def get_stats(self):
+        return self.__stats

@@ -17,6 +17,10 @@ class JSONHandler:
         self.__save_unmatched = save_unmatched
         self.__unmatched_key = unmatched_key
 
+        self.__stats = {
+            'total_count': 0
+        }
+
     def process(self):
         import json
 
@@ -27,6 +31,9 @@ class JSONHandler:
         result = []
         content = self.json
         for jsonitem in content:
+            # Updating stats
+            self.__stats['total_count'] += 1
+
             item = {}
             for yaml_key, yaml_value in self.__mapping.items():
                 if 'col' in yaml_value:
@@ -89,6 +96,9 @@ class JSONHandler:
 
             # Iterating over JSON generator
             for jsonobject in self.__content:
+                # Updating stats
+                self.__stats['total_count'] += 1
+
                 item = {}
 
                 # For each JSON Object, iterating over the YAML mapping and retrieving data
@@ -196,3 +206,6 @@ class JSONHandler:
 
     def set_callback(self, callback):
         self.__callback = callback
+
+    def get_stats(self):
+        return self.__stats

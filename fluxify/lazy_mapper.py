@@ -9,6 +9,7 @@ class LazyMapper:
         self.__error_tolerance = error_tolerance
         self.__bulksize = bulksize
         self.__callback = None
+        self.__stats = None
 
     def map(self, filepath, mapping, delimiter=',', skip_blank_lines=False, root_node=None, item_node=None, skip_header=False):
         if self.__type == 'csv':
@@ -22,6 +23,8 @@ class LazyMapper:
             handler.set_callback(self.__callback)
 
             handler.lazy_process()
+
+            self.__stats = handler.get_stats()
         elif self.__type == 'json':
             from fluxify.handler.json import JSONHandler
 
@@ -29,9 +32,13 @@ class LazyMapper:
             if not self.__check_callback():
                 raise Exception('[error] Callback must be defined')
 
+            handler.set_mapper(self)
             handler.set_bulksize(self.__bulksize)
             handler.set_callback(self.__callback)
+
             handler.lazy_process()
+
+            self.__stats = handler.get_stats()
         elif self.__type == 'xml':
             from fluxify.handler.xmlh import XMLHandler
 
@@ -43,6 +50,8 @@ class LazyMapper:
             handler.set_callback(self.__callback)
 
             handler.lazy_process()
+
+            self.__stats = handler.get_stats()
         else:
             raise Exception('[error] Unsupported format "{}"'.format(self.__type))
 
@@ -54,3 +63,6 @@ class LazyMapper:
 
     def __check_callback(self):
         return self.__callback is not None
+
+    def get_stats(self):
+        return self.__stats

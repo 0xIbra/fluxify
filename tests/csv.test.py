@@ -7,3 +7,4 @@ with open('./fluxify/examples/csv.yaml', 'r') as fh:
 mapper = Mapper()
 data = mapper.map('./fluxify/examples/flux1.csv', Map, skip_header=True)
 print(json.dumps(data))
+print('STATS : ', mapper.get_stats())
