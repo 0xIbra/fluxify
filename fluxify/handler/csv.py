@@ -64,6 +64,9 @@ class CSVHandler:
                     # Set to None if value is NaN
                     finalvalue = Utils.clean_if_nan(finalvalue)
 
+                    if finalvalue is None:
+                        finalvalue = ''
+
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
@@ -144,8 +147,12 @@ class CSVHandler:
                     # Set to None if value is NaN
                     finalvalue = Utils.clean_if_nan(finalvalue)
 
+                    if finalvalue is None:
+                        finalvalue = ''
+
                     if 'transformations' in map_value:
-                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
+                        finalvalue = handle_transformations(map_value['transformations'], finalvalue,
+                                                            error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, map_key, finalvalue)
 

@@ -49,7 +49,7 @@ def get(key, subject):
 def handle_conditions(conditions, subject, source=None):
     returnvalue = False
     for cond in conditions:
-        if not 'condition' in cond:
+        if 'condition' not in cond:
             raise ConditionNotFoundException('key "condition" was not found in mapping.')
 
         if test(cond['condition'], subject=subject, source=source):
