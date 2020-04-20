@@ -2,7 +2,7 @@ from fluxify.exceptions import ArgumentNotFoundException
 
 
 def split(transformation):
-    if not 'delimiter' in transformation:
+    if 'delimiter' not in transformation:
         raise ArgumentNotFoundException('"delimiter" was not found in transformation mapping.')
 
     value = transformation['value']
@@ -14,4 +14,9 @@ def split(transformation):
 
         return split[index]
 
-    return value.split(delimiter)
+    result = value.split(delimiter)
+    if type(result) is list:
+        if len(result) == 1 and result[0] == '':
+            result = []
+
+    return result
