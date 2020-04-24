@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "name": {
+                "firstname": "John",
+                "lastname": "Doe"
+            },
+            "age": "34",
+            "gender": "MALE",
+            "job": "Software engineer"
+        },
+        {
+            "name": {
+                "firstname": "Jane",
+                "lastname": "Doe"
+            },
+            "age": "29",
+            "gender": "FEMALE",
+            "job": "Data scientist",
+            "social_media": [
+                "facebook",
+                "twitter",
+                "linkedin",
+                "instagram"
+            ]
+        }
+    ]
+}

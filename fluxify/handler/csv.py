@@ -3,7 +3,6 @@ from fluxify.transformers.transformer import handle_transformations
 from fluxify.handler.conditions import handle_conditions
 from fluxify.utils import Utils
 import pandas as pd
-import numpy as np
 import parser
 import gc
 
@@ -30,14 +29,16 @@ class CSVHandler:
             'total_count_with_header': 0
         }
 
+        self.__csv = None
+
     def process(self):
-        self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
-        self.csv = self.csv.values
+        self.__csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
+        self.__csv = self.__csv.values
 
         labels = None
         result = []
 
-        for it, data in enumerate(self.csv):
+        for it, data in enumerate(self.__csv):
             # Updating stats
             self.__stats['total_count_with_header'] += 1
 
@@ -59,13 +60,24 @@ class CSVHandler:
 
                 if 'col' in map_value:
                     col = int(map_value['col'])
-                    finalvalue = data[col]
+
+                    default = None
+                    if 'default' in map_value:
+                        default = map_value['default']
+
+                    if col == '_all_':
+                        finalvalue = data
+                    else:
+                        finalvalue = data[col]
 
                     # Set to None if value is NaN
                     finalvalue = Utils.clean_if_nan(finalvalue)
 
                     if finalvalue is None:
-                        finalvalue = ''
+                        if default is None:
+                            finalvalue = ''
+                        else:
+                            finalvalue = default
 
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
@@ -117,8 +129,8 @@ class CSVHandler:
         return result
 
     def lazy_process(self):
-        self.csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
-        csv_generator = self.csv.T.iteritems()
+        self.__csv = pd.read_csv(self.filepath, delimiter=self.delimiter, skip_blank_lines=self.skip_blank_lines, header=None)
+        csv_generator = self.__csv.T.iteritems()
 
         ix = None
         labels = []
@@ -142,13 +154,24 @@ class CSVHandler:
             for map_key, map_value in self.mapping.items():
                 if 'col' in map_value:
                     col = int(map_value['col'])
-                    finalvalue = data[col]
+
+                    default = None
+                    if 'default' in map_value:
+                        default = map_value['default']
+
+                    if col == '_all_':
+                        col = data
+                    else:
+                        finalvalue = data[col]
 
                     # Set to None if value is NaN
                     finalvalue = Utils.clean_if_nan(finalvalue)
 
                     if finalvalue is None:
-                        finalvalue = ''
+                        if default is None:
+                            finalvalue = ''
+                        else:
+                            finalvalue = default
 
                     if 'transformations' in map_value:
                         finalvalue = handle_transformations(map_value['transformations'], finalvalue,
@@ -225,9 +248,9 @@ class CSVHandler:
 
         return unmatched
 
-    def __has(self, list: list, index):
+    def __has(self, data: list, index):
         try:
-            list[index]
+            data[index]
 
             return True
         except Exception as e:

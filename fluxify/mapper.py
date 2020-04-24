@@ -4,9 +4,11 @@ class Mapper:
     XML_FORMAT = 'xml'
     FORMATS = [CSV_FORMAT, JSON_FORMAT, XML_FORMAT]
 
-    def __init__(self, _type='csv', error_tolerance=False):
+    def __init__(self, _type='csv', error_tolerance=False, save_unmatched=True, unmatched_key='unmatched'):
         self.type = _type
         self.error_tolerance = error_tolerance
+        self.__save_unmatched = save_unmatched
+        self.__unmatched_key = unmatched_key
 
         self.__stats = None
 
@@ -14,7 +16,9 @@ class Mapper:
         if self.type == 'csv':
             from fluxify.handler.csv import CSVHandler
 
-            handler = CSVHandler(filepath, mapping, delimiter=delimiter, skip_blank_lines=skip_blank_lines, skip_header=skip_header, error_tolerance=self.error_tolerance)
+            handler = CSVHandler(filepath, mapping, delimiter=delimiter, skip_blank_lines=skip_blank_lines,
+                                 skip_header=skip_header, error_tolerance=self.error_tolerance,
+                                 save_unmatched=self.__save_unmatched, unmatched_key=self.__unmatched_key)
 
             result = handler.process()
 
@@ -24,7 +28,8 @@ class Mapper:
         elif self.type == 'json':
             from fluxify.handler.json import JSONHandler
 
-            handler = JSONHandler(filepath, mapping, root_node=root_node, error_tolerance=self.error_tolerance)
+            handler = JSONHandler(filepath, mapping, root_node=root_node, error_tolerance=self.error_tolerance,
+                                  save_unmatched=self.__save_unmatched, unmatched_key=self.__unmatched_key)
 
             result = handler.process()
 
@@ -34,7 +39,9 @@ class Mapper:
         elif self.type == 'xml':
             from fluxify.handler.xmlh import XMLHandler
 
-            handler = XMLHandler(filepath, mapping, item_node=item_node, root_node=root_node, error_tolerance=self.error_tolerance)
+            handler = XMLHandler(filepath, mapping, item_node=item_node, root_node=root_node,
+                                 error_tolerance=self.error_tolerance, save_unmatched=self.__save_unmatched,
+                                 unmatched_key=self.__unmatched_key)
 
             result = handler.process()
 

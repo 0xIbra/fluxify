@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client code="agency.2348325">
+	<coordonnees>
+		<nom>Mercedes-Benz Passion</nom>
+		<raison_sociale>PASSION AUTO</raison_sociale>
+		<adresse>
+			<rue></rue>
+			<code_postal>75009</code_postal>
+			<ville>Paris</ville>
+			<pays>France</pays>
+		</adresse>
+		<telephone></telephone>
+		<fax></fax>
+		<email>contact@example.com</email>
+		<web></web>
+		<logo></logo>
+	</coordonnees>
+		<annonce id="87878340">
+            <titre>BMW X4 xDrive30i 252ch M Sport X Euro6d-T 151g</titre>
+            <titre_fr>BMW X4 xDrive30i 252ch M Sport X Euro6d-T 151g</titre_fr>
+            <texte>xDrive30i 252ch M Sport X Euro6d-T 151g, essence, blanc, 27/12/2019, premi&#232;re main, Alpinweiss uni, Aluminium Line satine BMW Individual, Appui lombaire ajustable pour sieges avant, BMW Live Cockpit Navigation Pro, Ciel de pavillon anthracite, Climatisation automatique bi-zone, Eclairage d'ambiance, Feux de route anti-eblouissement, Finition M Sport X, Freins M Sport, Inserts decor.Aluminium Rhombicle fonce baguette d'accent.chrome brillant perle, Kit aerodynamique M Sport X, Kit rangement, Pack Advanced Full LED, Projecteurs antibrouillard a LED, Retroviseur interieur anti-eblouissement, Retroviseurs rabattables electriquement Retroviseur conducteur antieblouissement, Sieges Advanced pour conducteur et passager avant, Volant M gaine cuir, Acces Confort, Affichage Tete Haute HUD couleur, Alarme antivol, Commande gestuelle BMW, Connectivite avancee sans fil avec recharge par induction, Hotspot WiFi, Pack Confort, Pack ConnectedDrive, Pack Connected Pro, Pack Innovation, Pack Safety, Park Assist Plus, Rails de toit Aluminium satine, Sellerie Cuir Vernasca Schwarz avec surpiqures contrastantes Bleues, Sieges avant chauffants, Sieges avant electriques a memoire conducteur, Vitrage calorifuge, Vitrage insonorisant</texte>
+            <texte_fr>xDrive30i 252ch M Sport X Euro6d-T 151g, essence, blanc, 27/12/2019, premi&#232;re main, Alpinweiss uni, Aluminium Line satine BMW Individual, Appui lombaire ajustable pour sieges avant, BMW Live Cockpit Navigation Pro, Ciel de pavillon anthracite, Climatisation automatique bi-zone, Eclairage d'ambiance, Feux de route anti-eblouissement, Finition M Sport X, Freins M Sport, Inserts decor.Aluminium Rhombicle fonce baguette d'accent.chrome brillant perle, Kit aerodynamique M Sport X, Kit rangement, Pack Advanced Full LED, Projecteurs antibrouillard a LED, Retroviseur interieur anti-eblouissement, Retroviseurs rabattables electriquement Retroviseur conducteur antieblouissement, Sieges Advanced pour conducteur et passager avant, Volant M gaine cuir, Acces Confort, Affichage Tete Haute HUD couleur, Alarme antivol, Commande gestuelle BMW, Connectivite avancee sans fil avec recharge par induction, Hotspot WiFi, Pack Confort, Pack ConnectedDrive, Pack Connected Pro, Pack Innovation, Pack Safety, Park Assist Plus, Rails de toit Aluminium satine, Sellerie Cuir Vernasca Schwarz avec surpiqures contrastantes Bleues, Sieges avant chauffants, Sieges avant electriques a memoire conducteur, Vitrage calorifuge, Vitrage insonorisant</texte_fr>
+            <contact_a_afficher>PASSION AUTO</contact_a_afficher>
+            <email_a_afficher>contact@example.com</email_a_afficher>
+            <telephone_a_afficher>00 00 00 00 00</telephone_a_afficher>
+			<photos>
+				<photo>http://photos.example.com/234235/577544/photos/1.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/2.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/3.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/4.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/5.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/6.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/7.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/8.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/9.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/10.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/11.jpg?20200304063434</photo>
+				<photo>http://photos.example.com/234235/577544/photos/12.jpg?20200304063434</photo>
+			</photos>
+		<vehicule>
+            <carrosserie>Break</carrosserie>
+            <marque>BMW</marque>
+            <modele>X4</modele>
+			<premiere_main>1</premiere_main>
+			<mise_en_circulation>27/12/2019</mise_en_circulation>
+			<kilometrage>2</kilometrage>
+			<nb_places>5</nb_places>
+			<energie>essence</energie>
+			<couleur>blanc</couleur>
+			<boite_de_vitesse>automatique</boite_de_vitesse>
+			<nb_portes>5</nb_portes>
+			<statut>v&#233;hicule de d&#233;monstration</statut>
+			<version>xDrive30i 252ch M Sport X Euro6d-T 151g</version>
+			<climatisation>automatique</climatisation>
+		</vehicule>
+	</annonce>
+	<annonce id="1130475">
+            <titre>BMW S&#233;rie 7 730dA xDrive 265ch M Sport Euro6c</titre>
+            <titre_fr>BMW S&#233;rie 7 730dA xDrive 265ch M Sport Euro6c</titre_fr>
+            <texte>730dA xDrive 265ch M Sport Euro6c, diesel, noir m&#233;tallis&#233;, 26/11/2019, premi&#232;re main, Alarme antivol, Appel d'Urgence Intelligent, Boite de vitesses automatique Sport avec palettes de changement de rapport, Ciel de pavillon anthracite, Climatisation automatique 4 zones, Cuir Dakota Schwarz, Eclairage d'ambiance, Feux de route anti-eblouissement, Finition M Sport, Inserts decoratifs Fineline noir avec effet metallique brillant, Kit aerodynamique M, Pack Advanced Full LED, Pack Chauffage integral avant, Planche de bord en cuir, Pneumatiques RSC permettant le roulage a plat, Projecteurs antibrouillard a LED, Saphirschwarz metallise, Shadow Line brillant, Sieges Advanced Comfort a l avant, Store pare-soleil electrique pour lunette arriere, Systeme Hi-Fi Harman Kardon, Toit ouvrant en verre coulissant et entrebaillable electriquement, Volant Sport gaine cuir, Affichage Tete Haute HUD couleur, Camera de recul, Jantes en alliage leger 20 style 648M a rayons doubles, Pack Advanced Safety, Pack Advanced Safety avec pilote semi automatique, Pack Innovation, Pack parfums d ambiance, Stationnement autonome telecommande, Stores pare soleil pour lunette arriere et vitres laterales arrieres, Surround View, Systeme de manoeuvres automatiques Park Assist, Vitrage calorifuge</texte>
+            <texte_fr>730dA xDrive 265ch M Sport Euro6c, diesel, noir m&#233;tallis&#233;, 26/11/2019, premi&#232;re main, Alarme antivol, Appel d'Urgence Intelligent, Boite de vitesses automatique Sport avec palettes de changement de rapport, Ciel de pavillon anthracite, Climatisation automatique 4 zones, Cuir Dakota Schwarz, Eclairage d'ambiance, Feux de route anti-eblouissement, Finition M Sport, Inserts decoratifs Fineline noir avec effet metallique brillant, Kit aerodynamique M, Pack Advanced Full LED, Pack Chauffage integral avant, Planche de bord en cuir, Pneumatiques RSC permettant le roulage a plat, Projecteurs antibrouillard a LED, Saphirschwarz metallise, Shadow Line brillant, Sieges Advanced Comfort a l avant, Store pare-soleil electrique pour lunette arriere, Systeme Hi-Fi Harman Kardon, Toit ouvrant en verre coulissant et entrebaillable electriquement, Volant Sport gaine cuir, Affichage Tete Haute HUD couleur, Camera de recul, Jantes en alliage leger 20 style 648M a rayons doubles, Pack Advanced Safety, Pack Advanced Safety avec pilote semi automatique, Pack Innovation, Pack parfums d ambiance, Stationnement autonome telecommande, Stores pare soleil pour lunette arriere et vitres laterales arrieres, Surround View, Systeme de manoeuvres automatiques Park Assist, Vitrage calorifuge</texte_fr>
+            <contact_a_afficher>PASSION AUTO</contact_a_afficher>
+            <email_a_afficher>contact@example.com</email_a_afficher>
+            <telephone_a_afficher>00 00 00 00 00</telephone_a_afficher>
+		<photos>
+				<photo>http://photos.example.com/2325/2353463/photos/1.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/2.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/3.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/4.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/5.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/6.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/7.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/8.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/9.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/10.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/11.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/12.jpg?20200415061043</photo>
+				<photo>http://photos.example.com/2325/2353463/photos/13.jpg?20200415061043</photo>
+			</photos>
+		<vehicule>
+            <carrosserie>conduite int&#233;rieure</carrosserie>
+            <marque>BMW</marque>
+            <modele>S&#233;rie 7</modele>
+			<premiere_main>1</premiere_main>
+			<mise_en_circulation>26/11/2019</mise_en_circulation>
+			<kilometrage>50</kilometrage>
+			<nb_places>5</nb_places>
+			<energie>diesel</energie>
+			<couleur>noir</couleur>
+			<boite_de_vitesse>automatique</boite_de_vitesse>
+			<nb_portes>4</nb_portes>
+			<statut>v&#233;hicule de d&#233;monstration</statut>
+			<version>730dA xDrive 265ch M Sport Euro6c</version>
+			<climatisation>automatique</climatisation>
+		</vehicule>
+	</annonce>
+</client>

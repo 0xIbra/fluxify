@@ -17,6 +17,8 @@ class JSONHandler:
         self.__save_unmatched = save_unmatched
         self.__unmatched_key = unmatched_key
 
+        self.__content = None
+
         self.__stats = {
             'total_count': 0
         }
@@ -30,7 +32,13 @@ class JSONHandler:
 
         result = []
         content = self.json
-        for jsonitem in content:
+
+        if type(self.__root_node) is not str:
+            iterator = iter(content)
+        else:
+            iterator = iter(content[self.__root_node])
+
+        for jsonitem in iterator:
             # Updating stats
             self.__stats['total_count'] += 1
 
@@ -38,7 +46,27 @@ class JSONHandler:
             for yaml_key, yaml_value in self.__mapping.items():
                 if 'col' in yaml_value:
                     col = yaml_value['col']
-                    finalvalue = self.get(col, jsonitem)
+
+                    multiple = None
+                    value_index = None
+                    default = None
+
+                    if 'multiple' in yaml_value:
+                        multiple = yaml_value['multiple']
+
+                    if 'index' in yaml_value:
+                        val_index = yaml_value['index']
+                        if type(val_index) is int:
+                            value_index = val_index
+
+                    if 'default' in yaml_value:
+                        default = yaml_value['default']
+
+                    if col == '_all_':
+                        finalvalue = jsonitem
+                    else:
+                        finalvalue = self.get(col, jsonitem, multiple, value_index, default)
+
                     if 'transformations' in yaml_value:
                         finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
 
@@ -86,7 +114,7 @@ class JSONHandler:
         import ijson
 
         root_node = 'item'
-        if self.__root_node is not None and self.__root_node is str:
+        if self.__root_node is not None and type(self.__root_node) is str:
             root_node = '{}.item'.format(self.__root_node)
 
         with open(self.__filepath, 'rb') as fh:
@@ -106,7 +134,26 @@ class JSONHandler:
 
                     if 'col' in yaml_value:
                         col = yaml_value['col']
-                        finalvalue = self.get(col, jsonobject)
+
+                        multiple = None
+                        value_index = None
+                        default = None
+
+                        if 'multiple' in yaml_value:
+                            multiple = yaml_value['multiple']
+
+                        if 'index' in yaml_value:
+                            val_index = yaml_value['index']
+                            if type(val_index) is int:
+                                value_index = val_index
+
+                        if 'default' in yaml_value:
+                            default = yaml_value['default']
+
+                        if col == '_all_':
+                            finalvalue = jsonobject
+                        else:
+                            finalvalue = self.get(col, jsonobject, multiple, value_index, default)
 
                         # If transformations are defined in the mapping, applying them
                         if 'transformations' in yaml_value:
@@ -165,13 +212,36 @@ class JSONHandler:
                 results = []
                 gc.collect()
 
-    def get(self, key, subject):
+    def get(self, key, subject, multiple=None, value_index=None, default=None):
         split = key.split('.')
-        for val in split:
-            if not val in subject:
-                return False
-            subject = subject[val]
+        split_count = len(split)
+        for index, val in enumerate(split):
+            if val not in subject:
+                if default is None:
+                    return False
+                else:
+                    return default
 
+            it = index + 1
+
+            if it == split_count:
+                subject = subject[val]
+                if type(subject) is list and len(subject) > 0:
+                    if type(value_index) is int:
+                        try:
+                            subject = subject[value_index]
+                        except:
+                            if default is None:
+                                return False
+                            else:
+                                return default
+                    elif type(value_index) is str:
+                        if value_index == 'first':
+                            subject = subject[0]
+                        elif value_index == 'last':
+                            subject = subject[-1]
+            else:
+                subject = subject[val]
 
         # Set to None if value is NaN
         subject = Utils.clean_if_nan(subject)

@@ -1,0 +1,23 @@
+first_name:
+  col: name.firstname
+#  transformations:
+#    - { transformer: 'split', delimiter: ' ', index: 0 }
+last_name:
+  col: name.lastname
+#  transformations:
+#    - { transformer: 'split', delimiter: ' ', index: 1 }
+full_name:
+  value: "$subject['first_name'] + ' ' + $subject['last_name']"
+age:
+  col: age
+  transformations:
+    - { transformer: 'number' }
+gender:
+  col: gender
+  multiple: true
+is_18:
+  conditions:
+    -
+      condition: "$subject['age'] > 18"
+      returnOnSuccess: true
+      returnOnFail: false

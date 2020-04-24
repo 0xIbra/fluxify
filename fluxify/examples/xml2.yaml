@@ -1,0 +1,59 @@
+title:
+  col: titre
+
+title_fr:
+  col: titre_fr
+
+agency.name:
+  col: contact_a_afficher
+
+agency.email:
+  col: email_a_afficher
+
+agency.phone:
+  col: telephone_a_afficher
+
+maker.original:
+  col: vehicule.marque
+
+model.original:
+  col: vehicule.modele
+
+category.original:
+  col: vehicule.carrosserie
+
+energy.original:
+  col: vehicule.energie
+
+gearbox.original:
+  col: vehicule.boite_de_vitesse
+
+version.original:
+  col: vehicule.version
+
+color.outside.original:
+  col: vehicule.couleur
+
+first_hand:
+  col: vehicule.premiere_main
+  transformations:
+    - { transformer: boolean }
+
+registration.date:
+  col: vehicule.mise_en_circulation
+  transformations:
+    - { transformer: date, in_format: '%d/%m/%Y', out_format: '%Y-%m-%d' }
+
+mileage:
+  col: vehicule.kilometrage
+  transformations:
+    - { transformer: number }
+
+places:
+  col: vehicule.nb_places
+  transformations:
+    - { transformer: number }
+
+photos:
+  col: photos.photo
+  multiple: true

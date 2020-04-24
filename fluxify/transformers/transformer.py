@@ -23,7 +23,7 @@ def handle_transformations(transformations, value, error_tolerance=False):
         transformation['value'] = finalvalue
         transformation['error_tolerance'] = error_tolerance
         transformer = transformation['transformer']
-        if not transformer in TRANSFORMERS:
+        if transformer not in TRANSFORMERS:
             raise UnsupportedTransformerException('Unsupported transformer: "{}"'.format(transformer))
 
         invoker = TRANSFORMERS[transformer]

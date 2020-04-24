@@ -16,7 +16,8 @@ pip install fluxify
 This class is used read and processing fast files with small amounts of data that can be loaded into memory.
 
 ##### `fluxify.lazy_mapper.LazyMapper`
-You've probable guessed it, this class is used to iterate on large files of data wether it is of format CSV, JSON or XML. 
+You've probable guessed it, this class is used to iterate on large files of data wether it is of format CSV,
+JSON or XML. 
 
 ## Usage
 Retrieve data from a simple CSV file
@@ -76,7 +77,8 @@ print(data)
 ```
 
 #### LazyMapper implementation
-The `LazyMapper` does not return all the mapped data at the end, instead it maps the data in small sizes that you can specify in order to not max out the memory.
+The `LazyMapper` does not return all the mapped data at the end,  
+instead it maps the data in small sizes that you can specify in order to not max out the memory.
 
 ```python
 from fluxify.lazy_mapper import LazyMapper
@@ -115,6 +117,34 @@ mapper.set_callback(some_callback)
 mapper.map('path/to/csvfile.csv', Map)
 ```
 As you can see, in this example the mapper will call the callback function every time it accumulates 500 mapped items.
+
+### Mapping settings
+`col` key is used to specify the column number or attribute name from where the value must be retrieved.  
+If you want to specify the input data as the retrieved value use `_all_` as the value of `col`
+
+`transformations` key is used to apply transformations to the retrieved value.  Available transformers are listed below.
+
+`conditions` key is used to apply conditions and alter the retrieved value.  
+These conditions are in Python syntax, but you may not use all of Python's native functions.  
+Available functions are listed below.
+
+`default` is used to define a default value for when a retrieved value is **null**.  
+**Warning**: If the `default` key is defined with a value, it will be applied before applying transformations
+and conditions.
+
+##### Special cases for JSON and XML
+**XML**  
+Set the `multiple` to `true` if you want to retrieve data from multiple XML tags with the same name.  
+Use the `index` key with `multiple: true` if you wish to retrieve only one value from a number of XML tags.  
+
+When retrieving a XML value, the default behaviour is to retrieve the `.text` value of the tag.  
+If you wish to change this, to retrieve a tag containing many other tags, use `raw` key and set it to `false`.  
+This will return you an object of type `xml.etree.Element`, you could later apply transformations on this object to alter,
+ organize and retrieve the data.
+
+**JSON**  
+Use `index` key to retrieve a specific value from an array.  
+Of course, it only works if the retrieved value is of type **array**.
 
 ### Supported formats
 

@@ -36,7 +36,31 @@ class XMLHandler:
             for yaml_key, yaml_value in self.mapping.items():
                 if 'col' in yaml_value:
                     col = yaml_value['col']
-                    finalvalue = self.get(col, xmlitem)
+
+                    multiple = None
+                    value_index = None
+                    default = None
+                    raw = True
+
+                    if 'multiple' in yaml_value:
+                        multiple = yaml_value['multiple']
+
+                    if 'index' in yaml_value:
+                        value_index = yaml_value['index']
+
+                    if 'default' in yaml_value:
+                        default = yaml_value['default']
+
+                    if 'raw' in yaml_value:
+                        raw_ = yaml_value['raw']
+                        if type(raw_) is bool:
+                            raw = raw_
+
+                    if col == '_all_':
+                        finalvalue = xmlitem
+                    else:
+                        finalvalue = self.get(col, xmlitem, multiple, value_index, default, raw)
+
                     if 'transformations' in yaml_value:
                         finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
                     item = apply_value(item, yaml_key, finalvalue)
@@ -98,7 +122,28 @@ class XMLHandler:
                 for map_key, map_value in self.mapping.items():
                     if 'col' in map_value:
                         col = map_value['col']
-                        finalvalue = self.get(col, elem)
+
+                        multiple = None
+                        value_index = None
+                        default = None
+                        raw = True
+
+                        if 'multiple' in map_value:
+                            multiple = map_value['multiple']
+
+                        if 'index' in map_value:
+                            value_index = map_value['index']
+
+                        if 'default' in map_value:
+                            default = map_value['default']
+
+                        if 'raw' in map_value:
+                            raw_ = map_value['raw']
+                            if type(raw_) is bool:
+                                raw = raw_
+
+                        finalvalue = self.get(col, elem, multiple, value_index, default, raw)
+
                         if 'transformations' in map_value:
                             finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
 
@@ -158,25 +203,94 @@ class XMLHandler:
             result.clear()
             gc.collect()
 
-    def get(self, key, subject):
-
+    def get(self, key, subject, multiple=None, value_index=None, default=None, raw=True):
         split = key.split('.')
+        split_count = len(split)
         for index, val in enumerate(split):
             if '$subject' == val:
                 continue
 
-            value = subject.find(val)
-            if value is None:
-                return False
-
             it = index + 1
-            if it == len(split):
-                subject = value.text
+
+            if it != split_count:
+                value = subject.find(val)
+            else:
+                value = subject.findall(val)
+
+            if value is None:
+                if default is None:
+                    return False
+                else:
+                    return default
+
+            if type(value) is list and len(value) == 0:
+                if default is None:
+                    return False
+                else:
+                    return default
+
+            if it == split_count:
+                if type(value) is not list:
+                    if not multiple:
+                        if raw:
+                            subject = value.text
+                        else:
+                            subject = value
+                    else:
+                        res = []
+                        if raw:
+                            res.append(value.text)
+                        else:
+                            res.append(value)
+                        subject = res
+                else:
+                    if not multiple:
+                        if not value_index:
+                            if raw:
+                                subject = value[0].text
+                            else:
+                                subject = value[0]
+                        else:
+                            if type(value_index) is int:
+                                try:
+                                    if raw:
+                                        subject = value[value_index].text
+                                    else:
+                                        subject = value[value_index]
+                                except:
+                                    if default is None:
+                                        subject = False
+                                    else:
+                                        subject = default
+                    else:
+                        res = []
+                        if not value_index:
+                            for item in value:
+                                if raw:
+                                    res.append(item.text)
+                                else:
+                                    res.append(item)
+
+                            subject = res
+                        else:
+                            if type(value_index) is int:
+                                try:
+                                    if raw:
+                                        res.append(value[value_index].text)
+                                    else:
+                                        res.append(value[value_index])
+                                except:
+                                    pass
+
+                                subject = res
             else:
                 subject = value
 
         # Set to None if value is NaN
         subject = Utils.clean_if_nan(subject)
+
+        if subject is None and default is not None:
+            subject = default
 
         return subject
 
@@ -207,7 +321,9 @@ class XMLHandler:
                 if subject is None:
                     return False
             else:
-                subject.remove(subject.find(val))
+                remove_val = subject.find(val)
+                if remove_val is not None:
+                    subject.remove(subject.find(val))
 
         return True
 
