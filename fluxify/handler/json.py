@@ -67,8 +67,19 @@ class JSONHandler:
                     else:
                         finalvalue = self.get(col, jsonitem, multiple, value_index, default)
 
+                    transformations = []
+
+                    if 'transformation' in yaml_value:
+                        transformations.append(yaml_value['transformation'])
+
                     if 'transformations' in yaml_value:
-                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
+                        map_transformations = yaml_value['transformations']
+                        if type(map_transformations) is list:
+                            for tr in map_transformations:
+                                transformations.append(tr)
+
+                    if len(transformations) > 0:
+                        finalvalue = handle_transformations(transformations, finalvalue, error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, yaml_key, finalvalue)
 
@@ -155,9 +166,21 @@ class JSONHandler:
                         else:
                             finalvalue = self.get(col, jsonobject, multiple, value_index, default)
 
-                        # If transformations are defined in the mapping, applying them
+                        transformations = []
+
+                        if 'transformation' in yaml_value:
+                            transformations.append(yaml_value['transformation'])
+
                         if 'transformations' in yaml_value:
-                            finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
+                            map_transformations = yaml_value['transformations']
+                            if type(map_transformations) is list:
+                                for tr in map_transformations:
+                                    transformations.append(tr)
+
+                        # If transformations are defined in the mapping, applying them
+                        if len(transformations) > 0:
+                            finalvalue = handle_transformations(transformations, finalvalue,
+                                                                error_tolerance=self.__error_tolerance)
 
                         item = apply_value(item, yaml_key, finalvalue)
 
@@ -170,7 +193,7 @@ class JSONHandler:
                         if self.__save_unmatched:
                             self.__delete(col, jsonobject)
 
-                    elif 'value' in yaml_value:
+                    elif 'force_value' in yaml_value:
                         finalvalue = yaml_value['value']
                         if type(finalvalue) == str:
                             finalvalue = finalvalue.replace('$subject', 'item')

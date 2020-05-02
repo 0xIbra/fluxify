@@ -1,4 +1,8 @@
+from fluxify.transformers import validate_transformation_args
+
+
 def number(transformation):
+    validate_transformation_args(transformation)
 
     value = transformation['value']
 

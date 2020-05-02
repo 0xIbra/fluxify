@@ -14,9 +14,11 @@ class XMLHandler:
         self.mapping = mapping
         self.item_node = item_node
         self.root_node = root_node
-        self.error_tolerance = error_tolerance
+        self.__error_tolerance = error_tolerance
         self.__save_unmatched = save_unmatched
         self.__unmatched_key = unmatched_key
+
+        self.xml = None
 
         self.__stats = {
             'total_count': 0
@@ -58,11 +60,31 @@ class XMLHandler:
 
                     if col == '_all_':
                         finalvalue = xmlitem
+                    elif col.startswith('@attributes.'):
+                        try:
+                            finalvalue = xmlitem.attrib[col.replace('@attributes.', '')]
+                        except:
+                            # TODO: Maybe log something ?
+                            finalvalue = None
                     else:
                         finalvalue = self.get(col, xmlitem, multiple, value_index, default, raw)
 
+                    transformations = []
+
+                    if 'transformation' in yaml_value:
+                        transformations.append(yaml_value['transformation'])
+
                     if 'transformations' in yaml_value:
-                        finalvalue = handle_transformations(yaml_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
+                        map_transformations = yaml_value['transformations']
+                        if type(map_transformations) is list:
+                            for tr in map_transformations:
+                                transformations.append(tr)
+
+                    # If transformations are defined in the mapping, applying them
+                    if len(transformations) > 0:
+                        finalvalue = handle_transformations(transformations, finalvalue,
+                                                            error_tolerance=self.__error_tolerance)
+
                     item = apply_value(item, yaml_key, finalvalue)
 
                     if 'conditions' in yaml_value:
@@ -92,7 +114,7 @@ class XMLHandler:
                     item = apply_value(item, yaml_key, finalvalue)
                 else:
                     text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(yaml_key)
-                    if self.error_tolerance:
+                    if self.__error_tolerance:
                         Utils.log('error', text)
                         continue
                     else:
@@ -142,10 +164,31 @@ class XMLHandler:
                             if type(raw_) is bool:
                                 raw = raw_
 
-                        finalvalue = self.get(col, elem, multiple, value_index, default, raw)
+                        if col == '_all_':
+                            finalvalue = elem
+                        elif col.startswith('@attributes.'):
+                            try:
+                                finalvalue = elem.attrib[col.replace('@attributes.', '')]
+                            except:
+                                finalvalue = None
+                        else:
+                            finalvalue = self.get(col, elem, multiple, value_index, default, raw)
+
+                        transformations = []
+
+                        if 'transformation' in map_value:
+                            transformations.append(map_value['transformation'])
 
                         if 'transformations' in map_value:
-                            finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.error_tolerance)
+                            map_transformations = map_value['transformations']
+                            if type(map_transformations) is list:
+                                for tr in map_transformations:
+                                    transformations.append(tr)
+
+                        # If transformations are defined in the mapping, applying them
+                        if len(transformations) > 0:
+                            finalvalue = handle_transformations(transformations, finalvalue,
+                                                                error_tolerance=self.__error_tolerance)
 
                         item = apply_value(item, map_key, finalvalue)
 
@@ -176,7 +219,7 @@ class XMLHandler:
                         item = apply_value(item, map_key, finalvalue)
                     else:
                         text = '{} : No supported options found in mapping. Supported: [col, value, conditions]'.format(map_key)
-                        if self.error_tolerance:
+                        if self.__error_tolerance:
                             Utils.log('error', text)
                             continue
                         else:
@@ -244,7 +287,7 @@ class XMLHandler:
                             res.append(value)
                         subject = res
                 else:
-                    if not multiple:
+                    if multiple is False:
                         if not value_index:
                             if raw:
                                 subject = value[0].text
@@ -262,6 +305,35 @@ class XMLHandler:
                                         subject = False
                                     else:
                                         subject = default
+                    elif multiple is None:
+                        res = None
+                        if len(value) > 1:
+                            res = []
+                            if not value_index:
+                                for item in value:
+                                    if raw:
+                                        res.append(item.text)
+                                    else:
+                                        res.append(item)
+                            else:
+                                if type(value_index) is int:
+                                    try:
+                                        if raw:
+                                            res = value[value_index].text
+                                        else:
+                                            res = value[value_index]
+                                    except:
+                                        if default is None:
+                                            res = False
+                                        else:
+                                            res = default
+                        else:
+                            if raw:
+                                res = value[0].text
+                            else:
+                                res = value[0]
+
+                        subject = res
                     else:
                         res = []
                         if not value_index:

@@ -37,11 +37,14 @@ class Utils:
 
     @staticmethod
     def empty(value):
-        if value == '' or value == ' ':
-            return True
-
         if value is None:
             return True
+
+        if type(value) is str:
+            if value == '' or value == ' ':
+                return True
+
+            return False
 
         if value == {}:
             return True

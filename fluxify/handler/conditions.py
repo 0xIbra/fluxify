@@ -48,6 +48,15 @@ def get(key, subject):
 
 def handle_conditions(conditions, subject, source=None):
     returnvalue = False
+
+    if type(conditions) is dict:
+        conds = []
+        for (key, value) in conditions.items():
+            conds.append(value)
+
+        conditions = conds
+        del conds
+
     for cond in conditions:
         if 'condition' not in cond:
             raise ConditionNotFoundException('key "condition" was not found in mapping.')
@@ -71,7 +80,7 @@ def handle_conditions(conditions, subject, source=None):
 
             return value
         else:
-            if not 'returnOnFail' in cond:
+            if 'returnOnFail' not in cond:
                 cond['returnOnFail'] = False
 
             value = normalize(cond['returnOnFail'])

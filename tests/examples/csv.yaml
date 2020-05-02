@@ -7,27 +7,35 @@ generation.original:
 gearbox.original:
     col: 4
 energy.original:
-    value: '"ESSENCE"'
+    force_value: '"ESSENCE"'
 price:
     col: 5
-    transformations:
-        - { transformer: 'number' }
+    transformation:
+        class: number
 mileage:
     col: 6
-    transformations:
-        - { transformer: 'number' }
+    transformation:
+        class: number
 registration.date:
     col: 7
     transformations:
-        - { transformer: 'date', in_format: '%Y-%m-%d', out_format: '%d/%m/%Y' }
+        - class: 'DDFactory\Component\Mapper\Adapter\DateFormatAdapter'
+          args:
+              - '%Y-%m-%d'
+              - '%d/%m/%Y'
+#        - { transformer: 'date', in_format: '%Y-%m-%d', out_format: '%d/%m/%Y' }
 started_at.date:
     col: 8
     transformations:
-        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%d/%m/%Y' }
-started_at.time:
-    col: 8
-    transformations:
-        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%H:%M' }
+        - class: 'DDFactory\Component\Mapper\Adapter\DateFormatAdapter'
+          args:
+              - '%Y-%m-%d %H:%M'
+              - '%d/%m/%Y'
+#        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%d/%m/%Y' }
+#started_at.time:
+#    col: 8
+#    transformations:
+#        - { transformer: 'date', in_format: '%Y-%m-%d %H:%M', out_format: '%H:%M' }
 is_essence:
     conditions:
         - 
@@ -44,7 +52,7 @@ doors:
           condition: 'matches("-3P", $source[9])'
           returnOnSuccess: '3'
 condition.global:
-    value: '"vo"'
+    force_value: '"vo"'
     conditions:
         -
             condition: 'exists("$subject.mileage", $subject) and $subject["mileage"] >= 10000 and exists("$subject.registration.number", $subject) and exists("$subject.registration.date", $subject) and date($subject["registration"]["date"], "%d/%m/%Y") < date_modify(date(), "-", "years", 1)'

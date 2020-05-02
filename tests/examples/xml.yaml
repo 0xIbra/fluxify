@@ -9,7 +9,7 @@ full_name:
 age:
   col: age
   transformations:
-    - { transformer: 'number' }
+    - { class: 'number', args: [] }
 gender:
   col: gender
 is_18:

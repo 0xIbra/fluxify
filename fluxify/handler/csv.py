@@ -59,7 +59,7 @@ class CSVHandler:
             for map_key, map_value in self.mapping.items():
 
                 if 'col' in map_value:
-                    col = int(map_value['col'])
+                    col = map_value['col']
 
                     default = None
                     if 'default' in map_value:
@@ -68,6 +68,7 @@ class CSVHandler:
                     if col == '_all_':
                         finalvalue = data
                     else:
+                        col = int(col)
                         finalvalue = data[col]
 
                     # Set to None if value is NaN
@@ -79,8 +80,22 @@ class CSVHandler:
                         else:
                             finalvalue = default
 
+                    transformations = []
+
+                    if 'transformation' in map_value:
+                        transformations.append(map_value['transformation'])
+
                     if 'transformations' in map_value:
-                        finalvalue = handle_transformations(map_value['transformations'], finalvalue, error_tolerance=self.__error_tolerance)
+                        map_transformations = map_value['transformations']
+                        if type(map_transformations) is list:
+                            for tr in map_transformations:
+                                transformations.append(tr)
+                        elif type(map_transformations) is dict:
+                            for (i, tr) in map_transformations.items():
+                                transformations.append(tr)
+
+                    if len(transformations) > 0:
+                        finalvalue = handle_transformations(transformations, finalvalue, error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, map_key, finalvalue)
 
@@ -90,9 +105,10 @@ class CSVHandler:
 
                     # To remember which cols have already been retrieved
                     if self.__save_unmatched:
-                        cols_to_delete.append(col)
-                elif 'value' in map_value:
-                    finalvalue = map_value['value']
+                        if col != '_all_':
+                            cols_to_delete.append(col)
+                elif 'force_value' in map_value:
+                    finalvalue = map_value['force_value']
                     if type(finalvalue) == str:
                         finalvalue = finalvalue.replace('$subject', 'item')
                         expr = parser.expr(finalvalue)
@@ -119,8 +135,8 @@ class CSVHandler:
 
             # Unmatched
             if self.__save_unmatched:
-                for col in cols_to_delete:
-                    data[col] = None
+                for column in cols_to_delete:
+                    data[column] = None
 
                 item[self.__unmatched_key] = self.__get_unmatched(data, labels)
 
@@ -153,15 +169,16 @@ class CSVHandler:
             # Iterating through the mapping
             for map_key, map_value in self.mapping.items():
                 if 'col' in map_value:
-                    col = int(map_value['col'])
+                    col = map_value['col']
 
                     default = None
                     if 'default' in map_value:
                         default = map_value['default']
 
                     if col == '_all_':
-                        col = data
+                        finalvalue = data
                     else:
+                        col = int(col)
                         finalvalue = data[col]
 
                     # Set to None if value is NaN
@@ -173,8 +190,22 @@ class CSVHandler:
                         else:
                             finalvalue = default
 
+                    transformations = []
+
+                    if 'transformation' in map_value:
+                        transformations.append(map_value['transformation'])
+
                     if 'transformations' in map_value:
-                        finalvalue = handle_transformations(map_value['transformations'], finalvalue,
+                        map_transformations = map_value['transformations']
+                        if type(map_transformations) is list:
+                            for tr in map_transformations:
+                                transformations.append(tr)
+                        elif type(map_transformations) is dict:
+                            for (i, tr) in map_transformations.items():
+                                transformations.append(tr)
+
+                    if len(transformations) > 0:
+                        finalvalue = handle_transformations(transformations, finalvalue,
                                                             error_tolerance=self.__error_tolerance)
 
                     item = apply_value(item, map_key, finalvalue)
@@ -185,7 +216,8 @@ class CSVHandler:
 
                     # To remember which cols have already been retrieved
                     if self.__save_unmatched:
-                        cols_to_delete.append(col)
+                        if col != '_all_':
+                            cols_to_delete.append(col)
                 elif 'value' in map_value:
                     finalvalue = map_value['value']
                     if type(finalvalue) == str:
@@ -217,8 +249,13 @@ class CSVHandler:
 
             # Unmatched
             if self.__save_unmatched:
-                for col in cols_to_delete:
-                    data[col] = None
+                for column in cols_to_delete:
+                    try:
+                        data[column] = None
+                    except:
+                        print('\n')
+                        print(' COL : ', column)
+                        exit()
 
                 item[self.__unmatched_key] = self.__get_unmatched(data, labels)
 

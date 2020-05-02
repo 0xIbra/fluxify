@@ -1,17 +1,21 @@
 from datetime import datetime
 from fluxify.exceptions import ArgumentNotFoundException
+from fluxify.transformers import list_index_exists, validate_transformation_args
 
 
 def date(transformation):
-    if not 'in_format' in transformation:
-        raise ArgumentNotFoundException('"in_format" was not found in transformation mapping.')
+    if 'args' not in transformation:
+        validate_transformation_args(transformation)
 
-    if not 'out_format' in transformation:
-        raise ArgumentNotFoundException('"out_format" was not found in transformation mapping.')
+    if not list_index_exists(transformation['args'], 0):
+        raise ArgumentNotFoundException('Input format was not found in transformation arguments.')
+
+    if not list_index_exists(transformation['args'], 1):
+        raise ArgumentNotFoundException('Input format was not found in transformation arguments.')
 
     value = transformation['value']
-    in_format = transformation['in_format']
-    out_format = transformation['out_format']
+    in_format = transformation['args'][0]
+    out_format = transformation['args'][1]
 
     dateobj = datetime.strptime(value, in_format)
 

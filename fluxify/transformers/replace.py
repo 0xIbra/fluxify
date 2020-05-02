@@ -1,18 +1,18 @@
 from fluxify.exceptions import ArgumentNotFoundException
+from fluxify.transformers import list_index_exists, validate_transformation_args
 
 
 def replace(transformation):
-    if not 'value' in transformation:
-        raise ArgumentNotFoundException('"value" argument was not found in transformation mapping.')
+    validate_transformation_args(transformation)
 
-    if not 'search' in transformation:
-        raise ArgumentNotFoundException('"search" argument was not found in transformation mapping.')
+    if not list_index_exists(transformation['args'], 0):
+        raise ArgumentNotFoundException('"search" (index: 0) argument was not found in transformation mapping.')
 
-    if not 'new' in transformation:
-        raise ArgumentNotFoundException('"new" argument was not found in transformation mapping.')
+    if not list_index_exists(transformation['args'], 1):
+        raise ArgumentNotFoundException('"replace" (index: 0) argument was not found in transformation mapping.')
 
     value = transformation['value']
-    search = transformation['search']
-    new = transformation['new']
+    search = transformation['args'][0]
+    new = transformation['args'][1]
 
     return str(value).replace(search, new)
