@@ -1,4 +1,4 @@
 pandas
-PyYAML==5.2
+PyYAML==5.4
 imperium
 ijson
